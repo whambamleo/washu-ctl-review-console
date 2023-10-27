@@ -25,14 +25,15 @@ function getResponses() {
             sleep(3);
             $fileId = checkExportProgress($progressId);
         }
-        echo $fileId;
+//        echo $fileId;
     } catch (Exception $e) {
         echo 'Failed while checking progress of export:' .$e->getMessage();
         return;
     }
 
     try {
-        echo getResponseJSON($fileId);
+//        echo getResponseJSON($fileId);
+        return getResponseJSON($fileId);
     } catch (Exception $e) {
         echo 'Failed while fetching responses JSON file:' .$e->getMessage();
         return;

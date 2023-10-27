@@ -1,5 +1,7 @@
 <?php
 include('qualtrics.php');
+include('classes/Response.php');
+include('classes/ResponseCollection.php')
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +29,9 @@ include('qualtrics.php');
     <p id="test"> CTL Review Console </p>
     <?php
     try {
-        getResponses();
+        $responseCollection = new ResponseCollection(getResponses());
+        echo "successfully made response collection object";
+        $responseCollection->printValues();
     } catch (Exception $e) {
     }
     echo "<p>";
