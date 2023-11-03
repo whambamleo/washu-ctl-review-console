@@ -1,13 +1,21 @@
 <?php
 class Response {
     public $responseId;
-    public $values;
-    public $labels;
+    public $formStatus;
+    public $formSubmissionDate;
+    public $formFieldResponses;
 
     public function __construct($response) {
         $this->responseId = $response['responseId'];
         $this->values = $response['values'];
-        $this->labels = $response['labels'];
+        $this->formStatus = $this->values['formStatus'];
+        $this->formSubmissionDate = $this->values['endDate'];
+        
+        foreach ($response['values'] as $key => $value) {
+            if (substr($key, 0, 3) === "QID") {
+                $this->formFieldResponses["$key"] = $value;
+            }
+        }
     }
 }
 ?>

@@ -25,14 +25,12 @@ function getResponses() {
             sleep(3);
             $fileId = checkExportProgress($progressId);
         }
-//        echo $fileId;
     } catch (Exception $e) {
         echo 'Failed while checking progress of export:' .$e->getMessage();
         return;
     }
 
     try {
-//        echo getResponseJSON($fileId);
         return getResponseJSON($fileId);
     } catch (Exception $e) {
         echo 'Failed while fetching responses JSON file:' .$e->getMessage();
@@ -129,8 +127,6 @@ function getResponseJSON($fileId) {
     if ($fileId == null) {
         throw new Exception("File ID field provided was null!");
     }
-
-    echo $fileId;
 
     $url = "https://$dataCenterId.qualtrics.com/API/v3/surveys/$surveyId/export-responses/$fileId/file";
     $headers = [

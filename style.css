@@ -6,6 +6,7 @@ Version: 1.0
 Description: A custom WP theme developed for CTL review console
  */
 
-#test {
+.test {
     color: blue;
+    background-color: red;
 }
