@@ -17,7 +17,7 @@ class ResponseCollection
         }
     }
 
-    public function convertToCards() : string
+    public function convertToCards(): string
     {
         $cards = '<div class="cards">';
         foreach ($this->responses as $response) {
