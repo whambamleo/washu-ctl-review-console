@@ -3,7 +3,7 @@ class Response {
     public $responseId;
     public $formStatus;
     public $formSubmissionDate;
-    public $formFieldResponses;
+    public $formQuestionResponses;
 
     public function __construct($response) {
         $this->responseId = $response['responseId'];
@@ -13,7 +13,7 @@ class Response {
         
         foreach ($response['values'] as $key => $value) {
             if (substr($key, 0, 3) === "QID") {
-                $this->formFieldResponses["$key"] = $value;
+                $this->formQuestionResponses["$key"] = $value;
             }
         }
     }
