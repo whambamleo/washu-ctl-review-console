@@ -13,10 +13,21 @@ class Response {
         $this->formSubmissionDate = $values['endDate'];
         
         foreach ($response['values'] as $key => $value) {
-            if (substr($key, 0, 3) === "QID") {
+            if (str_starts_with($key, "QID")) {
                 $this->formQuestionResponses["$key"] = $value;
             }
         }
+    }
+
+    public function getJSON() {
+        $json_data = [
+            'responseId' => $this->responseId,
+            'formStatus' => $this->formStatus,
+            'formSubmissionDate' => $this->formSubmissionDate,
+            'formQuestionResponses' => $this->formQuestionResponses
+        ];
+
+        return json_encode($json_data);
     }
 
     public function getResponseId() {

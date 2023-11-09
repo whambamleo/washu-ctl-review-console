@@ -11,7 +11,7 @@ $api_token = $api_config['x-api-token'];
 $surveyId = $api_config['surveyId'];
 global $dataCenterId, $surveyId, $api_token;
 
-function getResponses() {
+function getResponsesFromQualtrics() {
     try {
         $progressId = startResponseExport();
     } catch (Exception $e) {

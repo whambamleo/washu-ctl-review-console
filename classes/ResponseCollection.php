@@ -33,5 +33,37 @@ class ResponseCollection
         }
         return $cards . "</div>";
     }
+
+    public function getResponseJSON() {
+        $output = array();
+        foreach ($this->responses as $response) {
+            $output[] = $response->getJSON();
+        }
+        return json_encode($output);
+    }
+
+    public function sortResponsesAlphabetically(): void
+    {
+        usort($this->responses, function ($a, $b) {
+            return strcmp($a->getResponseId(), $b->getResponseId());
+        });
+    }
+
+    public function sortResponsesByDate($newestFirst = true): void
+    {
+        usort($this->responses, function ($a, $b) use ($newestFirst) {
+            $dateA = strtotime($a->getFormSubmissionDate());
+            $dateB = strtotime($b->getFormSubmissionDate());
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            $comparison = ($dateA < $dateB) ? -1 : 1;
+
+            return $newestFirst ? -$comparison : $comparison;
+        });
+    }
 }
+
 ?>
