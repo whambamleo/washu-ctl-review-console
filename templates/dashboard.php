@@ -1,54 +1,67 @@
 <script>
+    document.addEventListener('DOMContentLoaded', getResponses);
+
     function clearCardContainer() {
         document.getElementById("cardContainer").innerHTML = '';
     }
 
-    function getResponses() {
+    async function getResponses() {
         clearCardContainer();
 
         // Define the URL for your custom endpoint
         const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
 
-        // Make a GET request to the custom endpoint
-        fetch(endpointURL)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to fetch data');
-                }
-            })
-            .then(data => {
-                // Handle the response data
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            renderResponses(JSON.parse(data)); // Render the responses
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    function getSortedResponsesNewestFirst() {
+    async function getSortedResponsesNewestFirst() {
         clearCardContainer();
 
         // Define the URL for your custom endpoint
         const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
 
-        // Make a GET request to the custom endpoint
-        fetch(endpointURL)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to fetch data');
-                }
-            })
-            .then(data => {
-                // Handle the response data
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            renderResponses(JSON.parse(data)); // Render the sorted responses
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    function renderResponses(responses) {
+        const cardContainer = document.getElementById('cardContainer');
+        responses.forEach(response => {
+            const responseObj = JSON.parse(response); // Parse the JSON string to an object
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.width = '50rem';
+
+            card.innerHTML = `
+                <div class="card-body">
+                    <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
+                    <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
+                    <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                    <p class="card-text text-right position-absolute" style="top: 0; right: 0; border: 1px solid green; border-radius: 10px; padding: 5px; margin: 5px;">${responseObj.formStatus}</p>
+                </div>
+                `;
+
+            cardContainer.appendChild(card);
+        });
     }
 
 </script>
@@ -77,8 +90,6 @@
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-12 mt-3">
-                        <button class="btn btn-primary" onclick="getResponses()"> GET responses </button>
-                        <button class="btn btn-primary" onclick="getSortedResponsesNewestFirst()"> GET sorted responses newest first </button>
                         <form class="d-flex justify-content-end">
                             <!-- Radio Buttons -->
                             <div class="form-check me-2">
@@ -113,13 +124,10 @@
                                     Sort
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="sortDropdown">
-                                    <a class="dropdown-item" href="#" onclick="">Newest
+                                    <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
                                         First</a>
-                                    <a class="dropdown-item" href="#" onclick="">
+                                    <a class="dropdown-item" href="#" onclick="getResponses()">
                                         Oldest First </a>
-                                    <a class="dropdown-item" href="#" onclick="">
-                                        Alphabetically
-                                        by ID </a>
                                 </div>
                             </div>
                         </form>
