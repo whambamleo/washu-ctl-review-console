@@ -22,7 +22,7 @@ function getResponsesFromQualtrics() {
     try {
         $fileId = checkExportProgress($progressId);
         while (strlen($fileId) == 0) {
-            sleep(1);
+            sleep(0.1);
             $fileId = checkExportProgress($progressId);
         }
     } catch (Exception $e) {

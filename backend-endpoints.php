@@ -6,13 +6,6 @@ include(get_template_directory() . '/qualtrics.php');
 include(get_template_directory() . '/classes/Response.php');
 include(get_template_directory() . '/classes/ResponseCollection.php');
 
-
-try {
-    $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-} catch (Exception $e) {
-    echo "Unable to make responseCollection";
-}
-
 function initCustomEndpoints(): void
 {
     add_action('rest_api_init', function () {
@@ -33,13 +26,35 @@ function initCustomEndpoints(): void
 
 function getResponses(): string
 {
-    global $responseCollection;
+    $responseCollection = get_transient('response_collection');
+
+    if (false === $responseCollection) {
+        try {
+            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+            // Cache the object for 1 hour
+            set_transient('my_response_collection', $responseCollection, 60 * 60);
+        } catch (Exception $e) {
+            return "Unable to make responseCollection";
+        }
+    }
+
     return $responseCollection->getResponseJSON();
 }
 
 function getSortedResponsesNewestFirst(): string
 {
-    global $responseCollection;
+    $responseCollection = get_transient('response_collection');
+
+    if (false === $responseCollection) {
+        try {
+            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+            // Cache the object for 1 hour
+            set_transient('my_response_collection', $responseCollection, 60 * 60);
+        } catch (Exception $e) {
+            return "Unable to make responseCollection";
+        }
+    }
+
     $responseCollection->sortResponsesByDate();
     return $responseCollection->getResponseJSON();
 }
