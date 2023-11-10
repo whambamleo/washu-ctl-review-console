@@ -65,40 +65,43 @@
             const responseObj = JSON.parse(response); // Parse the JSON string to an object
 
             const card = document.createElement('div');
-            card.className = 'card';
-            card.style.width = '50rem';
+            card.className = 'card cardCustom';
 
             card.innerHTML = `
-                <div class="card-body">
-                    <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
-                    <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
-                    <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
-                    <p class="card-text text-right position-absolute" style="top: 0; right: 0; border: 1px solid green; border-radius: 10px; padding: 5px; margin: 5px;">${responseObj.formStatus}</p>
+                <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
+                <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
+                <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
+                  ${responseObj.formStatus}
                 </div>
-                `;
+              `;
 
             cardContainer.appendChild(card);
         });
     }
 
 </script>
-<div class="container-fluid">
+<div>
     <!-- Top Banner -->
-    <div class="row bg-primary text-white p-3">
-        <div class="col">
-            <h1>CTL Review Console</h1>
+    <div class="header">
+        <div class="headerLeft">
+            <h2> CTL Review Console </h2>
+        </div>
+        <div class="headerRight">
+            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            <button type="button" class="btn btn-lg headerButton">Help</button>
         </div>
     </div>
     <!-- Main Content Section -->
     <div class="row">
         <!-- Left Sidebar -->
-        <div class="col-md-2 bg-light">
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-                <li>Item 4</li>
-                <!-- Add more sidebar items as needed -->
+        <div class="col-md-2 sidebar">
+            <ul class="list-group sidebarList">
+                <li class="list-group-item sidebarListItem">Cras justo odio</li>
+                <li class="list-group-item sidebarListItem">Dapibus ac facilisis in</li>
+                <li class="list-group-item sidebarListItem">Morbi leo risus</li>
+                <li class="list-group-item sidebarListItem">Porta ac consectetur ac</li>
+                <li class="list-group-item sidebarListItem">Vestibulum at eros</li>
             </ul>
         </div>
         <!-- Center Content -->
@@ -106,56 +109,43 @@
             <!-- Dropdowns, Radio Buttons, and Cards -->
             <div class="container mt-4">
                 <div class="row">
-                    <div class="col-12 mt-3">
-                        <form class="d-flex justify-content-end">
-                            <!-- Radio Buttons -->
-                            <div class="form-check me-2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="radioOption1"
-                                       value="option1">
-                                <label class="form-check-label" for="radioOption1">
-                                    Option 1
-                                </label>
+                    <div class="col-12 mt-3 toolbar">
+                        <!-- Radio Buttons -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
+                        </div>
+                        <!-- Filtering Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filter
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else</a>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="radioOption2"
-                                       value="option2">
-                                <label class="form-check-label" for="radioOption2">
-                                    Option 2
-                                </label>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sort
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="sortDropdown">
+                                <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
+                                    First</a>
+                                <a class="dropdown-item" href="#" onclick="getResponses()">
+                                    Oldest First </a>
                             </div>
-                            <!-- Filtering Dropdown -->
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Filter
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else</a>
-                                </div>
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Sort
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="sortDropdown">
-                                    <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
-                                        First</a>
-                                    <a class="dropdown-item" href="#" onclick="getResponses()">
-                                        Oldest First </a>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- Cards -->
             <div class="container mt-4">
                 <div class="row">
-                    <div class="col" id="cardContainer">
-                    </div>
+                    <div class="col" id="cardContainer"></div>
                 </div>
             </div>
         </div>
