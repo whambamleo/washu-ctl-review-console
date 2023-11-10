@@ -5,8 +5,24 @@
         document.getElementById("cardContainer").innerHTML = '';
     }
 
+    function clearCardContainerAndAddSpinner() {
+        document.getElementById("cardContainer").innerHTML = '';
+
+        const spinnerDiv = document.createElement("div");
+        spinnerDiv.className = "spinner-border";
+        spinnerDiv.setAttribute("role", "status");
+
+        const spinnerText = document.createElement("span");
+        spinnerText.className = "sr-only";
+        spinnerText.textContent = "Loading...";
+
+        spinnerDiv.appendChild(spinnerText);
+
+        document.getElementById("cardContainer").appendChild(spinnerDiv);
+    }
+
     async function getResponses() {
-        clearCardContainer();
+        clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
         const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
@@ -24,7 +40,7 @@
     }
 
     async function getSortedResponsesNewestFirst() {
-        clearCardContainer();
+        clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
         const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
@@ -43,6 +59,7 @@
 
 
     function renderResponses(responses) {
+        clearCardContainer();  // remove spinner before loading cards
         const cardContainer = document.getElementById('cardContainer');
         responses.forEach(response => {
             const responseObj = JSON.parse(response); // Parse the JSON string to an object
@@ -137,7 +154,8 @@
             <!-- Cards -->
             <div class="container mt-4">
                 <div class="row">
-                    <div class="col" id="cardContainer"></div>
+                    <div class="col" id="cardContainer">
+                    </div>
                 </div>
             </div>
         </div>
