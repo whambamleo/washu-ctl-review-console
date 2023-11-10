@@ -1,5 +1,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', getResponses);
+    let filter_choice;
 
     function clearCardContainer() {
         document.getElementById("cardContainer").innerHTML = '';
@@ -25,7 +26,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
+        const endpointURL = '/review-console/wp-json/console/v1/responses';
 
         try {
             const response = await fetch(endpointURL);
@@ -43,7 +44,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
+        const endpointURL = '/review-console/wp-json/console/v1/responsesSortedNewestFirst';
 
         try {
             const response = await fetch(endpointURL);
@@ -57,6 +58,27 @@
         }
     }
 
+    async function filter(event) {
+        event.preventDefault();
+        const filterInputValue = document.querySelector('input[name="filterInput"]').value;
+
+        // Define the base URL for your custom endpoint
+        const baseURL = '/review-console/wp-json/console/v1/responsesFiltered';
+
+        // Construct the URL with query parameters manually
+        const endpointURL = `${baseURL}?filterInput=${encodeURIComponent(filterInputValue)}`;
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            renderResponses(JSON.parse(data)); // Render the responses
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     function renderResponses(responses) {
         clearCardContainer();  // remove spinner before loading cards
@@ -123,22 +145,14 @@
                                     Option 2
                                 </label>
                             </div>
-                            <!-- Filtering Dropdown -->
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Filter
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else</a>
-                                </div>
+                            <div id="search">
+                                <input type="text" name="filterInput">
+                                <input type="submit" value="Search" onclick="filter(event)">
                             </div>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Sort
+                                    Sort By
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="sortDropdown">
                                     <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
