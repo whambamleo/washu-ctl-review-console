@@ -64,6 +64,23 @@ class ResponseCollection
             return $newestFirst ? -$comparison : $comparison;
         });
     }
+
+    public function filter($value): void
+    {
+        if ($value == "") {
+            return;
+        }
+        $filteredResponses = [];
+        foreach ($this->responses as $response) {
+            foreach (array_values($response->getFormQuestionResponses()) as $questionResponse) {
+                if (stripos($questionResponse, $value)) {
+                    $filteredResponses[] = $response;
+                    break;
+                }
+            }
+        }
+        $this->responses = $filteredResponses; // Assign the filtered array back to the property
+    }
 }
 
 ?>

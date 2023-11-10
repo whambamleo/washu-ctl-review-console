@@ -57,6 +57,27 @@
         }
     }
 
+    async function filter(event) {
+        event.preventDefault();
+        const filterInputValue = document.querySelector('input[name="filterInput"]').value;
+
+        // Define the base URL for your custom endpoint
+        const baseURL = '/washu-ctl-review-console/wp-json/console/v1/responsesFiltered';
+
+        // Construct the URL with query parameters manually
+        const endpointURL = `${baseURL}?filterInput=${encodeURIComponent(filterInputValue)}`;
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            renderResponses(JSON.parse(data)); // Render the responses
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     function renderResponses(responses) {
         clearCardContainer();  // remove spinner before loading cards
@@ -138,7 +159,23 @@
                                 <a class="dropdown-item" href="#" onclick="getResponses()">
                                     Oldest First </a>
                             </div>
-                        </div>
+                            <div id="search">
+                                <input type="text" name="filterInput">
+                                <input type="submit" value="Search" onclick="filter(event)">
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Sort By
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="sortDropdown">
+                                    <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
+                                        First</a>
+                                    <a class="dropdown-item" href="#" onclick="getResponses()">
+                                        Oldest First </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
