@@ -1,6 +1,5 @@
 <script>
     document.addEventListener('DOMContentLoaded', getResponses);
-    let filter_choice;
 
     function clearCardContainer() {
         document.getElementById("cardContainer").innerHTML = '';
@@ -26,7 +25,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/review-console/wp-json/console/v1/responses';
+        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
 
         try {
             const response = await fetch(endpointURL);
@@ -44,7 +43,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/review-console/wp-json/console/v1/responsesSortedNewestFirst';
+        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
 
         try {
             const response = await fetch(endpointURL);
@@ -63,7 +62,7 @@
         const filterInputValue = document.querySelector('input[name="filterInput"]').value;
 
         // Define the base URL for your custom endpoint
-        const baseURL = '/review-console/wp-json/console/v1/responsesFiltered';
+        const baseURL = '/washu-ctl-review-console/wp-json/console/v1/responsesFiltered';
 
         // Construct the URL with query parameters manually
         const endpointURL = `${baseURL}?filterInput=${encodeURIComponent(filterInputValue)}`;
