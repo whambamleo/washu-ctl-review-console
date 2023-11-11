@@ -25,7 +25,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
+        const endpointURL = '/review-console/wp-json/console/v1/responses';
 
         try {
             const response = await fetch(endpointURL);
@@ -43,7 +43,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
+        const endpointURL = '/-console/wp-json/console/v1/responsesSortedNewestFirst';
 
         try {
             const response = await fetch(endpointURL);
