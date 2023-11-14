@@ -25,7 +25,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responses';
+        const endpointURL = '/review-console/wp-json/console/v1/responses';
 
         try {
             const response = await fetch(endpointURL);
@@ -43,7 +43,7 @@
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
-        const endpointURL = '/washu-ctl-review-console/wp-json/console/v1/responsesSortedNewestFirst';
+        const endpointURL = '/review-console/wp-json/console/v1/responsesSortedNewestFirst';
 
         try {
             const response = await fetch(endpointURL);
@@ -62,7 +62,7 @@
         const filterInputValue = document.querySelector('input[name="filterInput"]').value;
 
         // Define the base URL for your custom endpoint
-        const baseURL = '/washu-ctl-review-console/wp-json/console/v1/responsesFiltered';
+        const baseURL = '/review-console/wp-json/console/v1/responsesFiltered';
 
         // Construct the URL with query parameters manually
         const endpointURL = `${baseURL}?filterInput=${encodeURIComponent(filterInputValue)}`;
@@ -102,6 +102,10 @@
     }
 
 </script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
 <div>
     <!-- Top Banner -->
     <div class="header">
@@ -131,41 +135,21 @@
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-12 mt-3 toolbar">
-                        <!-- Radio Buttons -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
-                        </div>
-                        <!-- Filtering Dropdown -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Filter
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else</a>
+                        <div class="toolbarLeft">
+                            <div class="input-group mb-3" id="search">
+                                <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="filter(event)">Search</button>
                             </div>
                         </div>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Sort
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="sortDropdown">
-                                <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
-                                    First</a>
-                                <a class="dropdown-item" href="#" onclick="getResponses()">
-                                    Oldest First </a>
+                        <div class="toolbarRight">
+                            <!-- Radio Buttons -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
                             </div>
-                            <div id="search">
-                                <input type="text" name="filterInput">
-                                <input type="submit" value="Search" onclick="filter(event)">
-                            </div>
+
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Sort By
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="sortDropdown">
@@ -175,7 +159,7 @@
                                         Oldest First </a>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

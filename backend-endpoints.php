@@ -39,7 +39,7 @@ function getResponses(): string
         try {
             $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
             // Cache the object for 1 hour
-            set_transient('my_response_collection', $responseCollection, 60 * 60);
+            set_transient('response_collection', $responseCollection, 60 * 60);
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -58,7 +58,7 @@ function getResponsesFiltered(): string
         try {
             $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
             // Cache the object for 1 hour
-            set_transient('my_response_collection', $responseCollection, 60 * 60);
+            set_transient('response_collection', $responseCollection, 60 * 60);
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -76,7 +76,7 @@ function getSortedResponsesNewestFirst(): string
         try {
             $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
             // Cache the object for 1 hour
-            set_transient('my_response_collection', $responseCollection, 60 * 60);
+            set_transient('response_collection', $responseCollection, 60 * 60);
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }

@@ -50,6 +50,7 @@ body {
 
 .sidebar {
     background-color: #01415A;
+
 }
 
 .sidebarList .sidebarListItem {
@@ -61,8 +62,22 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-end;
+}
+
+.toolbarLeft {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.toolbarRight {
+    width: 50%;
+    display: flex;
+    align-items: center;
     justify-content: flex-end;
-    gap: 20px;
+    gap: 25px;
+
 }
 
 #cardContainer {
@@ -74,4 +89,8 @@ body {
     width: 100%;
     margin: 10px;
     padding: 20px;
+}
+
+#search {
+    width: 60%;
 }
