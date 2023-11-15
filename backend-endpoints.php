@@ -29,6 +29,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/responsesGrouped', [
+            'methods' => 'GET',
+            'callback' => 'getResponsesGrouped',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -66,6 +73,23 @@ function getResponsesFiltered(): string
     $filteredResponseCollection = clone $responseCollection;
     $filteredResponseCollection->filter($filterInput);
     return $filteredResponseCollection->getResponseJSON();
+}
+
+function getResponsesGrouped(): string
+{    
+    $responseCollection = get_transient('response_collection');
+
+    if (false === $responseCollection || is_null($responseCollection)) {
+        try {
+            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+            // Cache the object for 1 hour
+            set_transient('response_collection', $responseCollection, 60 * 60);
+        } catch (Exception $e) {
+            return "Unable to make responseCollection";
+        }
+    }
+
+    return $responseCollection->getResponseGroupedJSON();
 }
 
 function getSortedResponsesNewestFirst(): string

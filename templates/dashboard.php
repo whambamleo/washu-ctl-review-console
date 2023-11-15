@@ -33,7 +33,7 @@
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            renderResponses(JSON.parse(data)); // Render the responses
+            renderResponses(JSON.parse(data), false); // Render the responses
         } catch (error) {
             console.error(error);
         }
@@ -51,7 +51,7 @@
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            renderResponses(JSON.parse(data)); // Render the sorted responses
+            renderResponses(JSON.parse(data), false); // Render the sorted responses
         } catch (error) {
             console.error(error);
         }
@@ -73,32 +73,83 @@
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            renderResponses(JSON.parse(data)); // Render the responses
+            renderResponses(JSON.parse(data), false); // Render the responses
         } catch (error) {
             console.error(error);
         }
     }
 
-    function renderResponses(responses) {
+    async function handleCheckboxChange(checkbox) {
+        // Define the base URL for your custom endpoint
+        const endpointURL = '/review-console/wp-json/console/v1/responsesGrouped';
+
+        if (checkbox.checked) {
+            console.log("ON");
+            try {
+                const response = await fetch(endpointURL);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await response.json();
+                renderResponses(JSON.parse(data), true); // Render the responses
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            getResponses();
+        }
+    }
+
+    function renderResponses(responses, isGrouped) {
         clearCardContainer();  // remove spinner before loading cards
         const cardContainer = document.getElementById('cardContainer');
-        responses.forEach(response => {
-            const responseObj = JSON.parse(response); // Parse the JSON string to an object
 
-            const card = document.createElement('div');
-            card.className = 'card cardCustom';
+        if (isGrouped) {
+            console.log(responses["submitted"]);
+            for (const formStatus in responses) {
 
-            card.innerHTML = `
-                <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
-                <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
-                <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
-                <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
-                  ${responseObj.formStatus}
-                </div>
-              `;
+                const group = document.createElement('div');
+                group.className = 'cardGroupCustom';
+                group.innerHTML = `<h3>${formStatus}</h3>`;
 
-            cardContainer.appendChild(card);
-        });
+                const responseUnderStatus = responses[formStatus];
+                for (const i in responseUnderStatus) {
+                    const responseObj = JSON.parse(responseUnderStatus[i]);
+                    const card = document.createElement('div');
+                    card.className = 'card cardCustom';
+
+                    card.innerHTML = `
+                        <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
+                        <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
+                        <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                        <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
+                        ${responseObj.formStatus}
+                        </div>
+                    `;
+                    group.appendChild(card);
+                }
+                cardContainer.appendChild(group);
+            }
+        } else {
+            // uncheck the groupby box because there is currently no sorting and filtering for grouped values.
+            var checkbox = document.getElementById("flexSwitchCheckDefault");
+            checkbox.checked = false;
+            responses.forEach(response => {
+                const responseObj = JSON.parse(response);
+                const card = document.createElement('div');
+                card.className = 'card cardCustom';
+
+                card.innerHTML = `
+                    <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
+                    <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
+                    <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                    <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
+                    ${responseObj.formStatus}
+                    </div>
+                `;
+                cardContainer.appendChild(card);
+            });
+        }
     }
 
 </script>
@@ -144,7 +195,7 @@
                         <div class="toolbarRight">
                             <!-- Radio Buttons -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onchange="handleCheckboxChange(this)">
                                 <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
                             </div>
 

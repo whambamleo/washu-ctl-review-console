@@ -3,6 +3,7 @@
 class ResponseCollection
 {
     public array $responses = [];
+    public array $groupedResponses = [];
 
     public function __construct($json)
     {
@@ -11,6 +12,12 @@ class ResponseCollection
             foreach ($jsonDataArray['responses'] as $responseData) {
                 $response = new Response($responseData);
                 $this->responses[] = $response;
+
+                $formStatus = $response->getFormStatus();
+                if (!isset($this->groupedResponses[$formStatus])) {
+                    $this->groupedResponses[$formStatus] = [];
+                }
+                $this->groupedResponses[$formStatus][] = $response;
             }
         } else {
             echo "Invalid JSON format.";
@@ -38,6 +45,18 @@ class ResponseCollection
         $output = array();
         foreach ($this->responses as $response) {
             $output[] = $response->getJSON();
+        }
+        return json_encode($output);
+    }
+
+    public function getResponseGroupedJSON() {
+        $output = array();
+        foreach ($this->groupedResponses as $formStatus => $groupedResponse) {
+            $group = array();
+            foreach ($groupedResponse as $response) {
+                $group[] = $response->getJSON();
+            }
+            $output[$formStatus] = $group;
         }
         return json_encode($output);
     }
