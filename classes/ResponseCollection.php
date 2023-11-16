@@ -92,10 +92,11 @@ class ResponseCollection
         $filteredResponses = [];
         foreach ($this->responses as $response) {
             foreach (array_values($response->getFormQuestionResponses()) as $questionResponse) {
-                if (stripos($questionResponse, $value)) {
+                if (stripos($questionResponse, $value) !== false) {
                     $filteredResponses[] = $response;
                     break;
                 }
+
             }
         }
         $this->responses = $filteredResponses; // Assign the filtered array back to the property
