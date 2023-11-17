@@ -86,18 +86,16 @@ body {
     align-items: center;
 }
 #cardContainer .cardCustom {
-    width: 100%;
+    width: 98%;
     margin: 10px;
-    padding: 20px;
+    padding: 10px;
 }
 
 #cardContainer .cardGroupCustom {
-    display: flex;
-    align-items: center;
     width: 100%;
     padding: 10px;
-    border: #CCC solid 2px;
-    border-radius: 5px;
+    margin: 10px;
+    background-color: #F5F5F5;
 }
 
 #search {
