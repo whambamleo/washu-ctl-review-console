@@ -5,7 +5,7 @@ Version: 1.0
 Version: 1.0
 Description: A custom WP theme developed for CTL review console
  */
-body {
+ body {
     margin: 0;
 }
 
@@ -50,7 +50,7 @@ body {
 
 .sidebar {
     background-color: #01415A;
-
+    height: 100vh;
 }
 
 .sidebarList .sidebarListItem {
@@ -100,4 +100,14 @@ body {
 
 #search {
     width: 60%;
+}
+
+#clearButton {
+    border-left: none;
+    border-color: #AAAA;
+    display: none;
+}
+
+#searchBar {
+    border-right: none;
 }

@@ -59,6 +59,9 @@
 
     async function filter(event) {
         event.preventDefault();
+
+        // display the clear button
+        document.getElementById('clearButton').style.display = 'inline-block';
         const filterInputValue = document.querySelector('input[name="filterInput"]').value;
 
         // Define the base URL for your custom endpoint
@@ -77,6 +80,13 @@
         } catch (error) {
             console.error(error);
         }
+    }
+
+    function clearSearch(event) {
+        document.querySelector('.searchTextInput').value = '';
+        filter(event);
+        // hide the button until a new search
+        document.getElementById('clearButton').style.display = 'none';
     }
 
     async function handleCheckboxChange(checkbox) {
@@ -188,7 +198,14 @@
                     <div class="col-12 mt-3 toolbar">
                         <div class="toolbarLeft">
                             <div class="input-group mb-3" id="search">
-                                <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput">
+                                <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput" id="searchBar">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="clearButton" onclick="clearSearch(event)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                    </svg>
+                                    </button>
+                                </div>
                                 <button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="filter(event)">Search</button>
                             </div>
                         </div>
