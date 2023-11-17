@@ -7,7 +7,21 @@ class ResponseCollection
 
     public function __construct($json)
     {
+        $this->groupedResponses = [];
+        $predefinedValues = [
+            'submitted',
+            'Tool Consultation',
+            'Tool Exploration',
+            'Tool Testing',
+            'Report/Proposal for Funding',
+            'Governance Recommendation',
+            'Tool Review Via ServiceNow'
+        ];
+
+        $this->groupedResponses = array_fill_keys($predefinedValues, []);
+
         $jsonDataArray = json_decode($json, true);
+
         if ($jsonDataArray) {
             foreach ($jsonDataArray['responses'] as $responseData) {
                 $response = new Response($responseData);
