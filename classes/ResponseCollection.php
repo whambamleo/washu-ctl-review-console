@@ -28,6 +28,11 @@ class ResponseCollection
             $card = $card . '<p class="card-text">Tool Name: ' . next($questionResponses) . "</p>";
             $card = $card . '<p class="card-text text-muted" style="text-align: right;">Submitted on: ' . $response->getFormSubmissionDate() . '</p>';
             $card = $card . '<p class="card-text text-right position-absolute" style="top: 0; right: 0; border: 1px solid green; border-radius: 10px; padding: 5px; margin: 5px;">' . $response->getFormStatus() . '</p>';
+            $card = $card . '<h5 class="card-title">' . reset($questionResponses) . '</h5>';
+//            $detailsUrl = "detailsPage.php?responseId=" . $response->getResponseId();
+//            $card = $card . '<a href="' . $detailsUrl . '" class="btn btn-primary">View Details</a>';
+    
+
             $card = $card . '</div></div>';
             $cards = $cards . $card;
         }

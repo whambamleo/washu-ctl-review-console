@@ -63,22 +63,34 @@
         const cardContainer = document.getElementById('cardContainer');
         responses.forEach(response => {
             const responseObj = JSON.parse(response); // Parse the JSON string to an object
-
+    
             const card = document.createElement('div');
             card.className = 'card cardCustom';
-
+    
+            // Construct the card HTML
             card.innerHTML = `
-                <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
-                <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
-                <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
-                <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
-                  ${responseObj.formStatus}
+                <div class="card-body">
+                    <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
+                    <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
+                    <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                    <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
+                      ${responseObj.formStatus}
+                    </div>
                 </div>
               `;
-
+    
+            // Create and append the 'View Details' button
+            const detailsButton = document.createElement('a');
+            detailsButton.href = `pages/detailsPage.php?responseId=${responseObj.responseId}`;
+            detailsButton.target = '_blank';
+            detailsButton.className = 'btn btn-primary';
+            detailsButton.textContent = 'View Details';
+            card.querySelector('.card-body').appendChild(detailsButton);
+    
             cardContainer.appendChild(card);
         });
     }
+    
 
 </script>
 <div>
@@ -88,7 +100,7 @@
             <h2> CTL Review Console </h2>
         </div>
         <div class="headerRight">
-            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboar1</button>
             <button type="button" class="btn btn-lg headerButton">Help</button>
         </div>
     </div>
