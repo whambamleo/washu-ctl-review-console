@@ -1,0 +1,113 @@
+/*
+Theme Name: washu-ctl-review-console
+Text Domain: washu-ctl-review-console
+Version: 1.0
+Version: 1.0
+Description: A custom WP theme developed for CTL review console
+ */
+body {
+    margin: 0;
+}
+
+.test {
+    color: blue;
+    background-color: red;
+}
+
+.header {
+    background-color: #01415A;
+    color: white;
+    height: 125px;
+    margin: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerLeft {
+    height: 100%;
+    width: 30%;
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.headerRight {
+    height: 100%;
+    width: 70%;
+    margin-right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.header .headerButton {
+    background-color: #01415A;
+    color: white;
+}
+
+.sidebar {
+    background-color: #01415A;
+    height: 100vh;
+}
+
+.sidebarList .sidebarListItem {
+    background-color: #01415A;
+    color: white;
+}
+
+.toolbar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-end;
+}
+
+.toolbarLeft {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.toolbarRight {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+
+}
+
+#cardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#cardContainer .cardCustom {
+    width: 98%;
+    margin: 10px;
+    padding: 10px;
+}
+
+#cardContainer .cardGroupCustom {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    background-color: #F5F5F5;
+}
+
+#search {
+    width: 60%;
+}
+
+#clearButton {
+    border-left: none;
+    border-color: #AAAA;
+    display: none;
+}
+
+#searchBar {
+    border-right: none;
+}

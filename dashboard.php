@@ -1,3 +1,17 @@
+<?php
+/*
+Template Name: Dashboard
+*/
+// TODO: Code below not working. I temporarily manually added the CSS from wp-admin but we should figure out how to automate this
+//add_action( 'wp_enqueue_scripts', 'dashboard_style' );
+//
+//function dashboard_style(): void
+//{
+//    wp_register_style( 'dashboard', get_stylesheet_directory_uri() . '/styles/dashboard.css');
+//    wp_enqueue_style( 'dashboard', get_stylesheet_directory_uri() . '/styles/dashboard.css');
+//}
+?>
+
 <script>
     document.addEventListener('DOMContentLoaded', getResponses);
 
