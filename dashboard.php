@@ -160,6 +160,9 @@ Template Name: Dashboard
             checkbox.checked = false;
             responses.forEach(response => {
                 const responseObj = JSON.parse(response);
+                const responseId = responseObj.responseId;
+                const singleResponseURL = `${window.location.href}single-response/?responseId=${responseId}`;
+
                 const card = document.createElement('div');
                 card.className = 'card cardCustom';
 
@@ -168,14 +171,20 @@ Template Name: Dashboard
                     <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
                     <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
                     <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
-                    ${responseObj.formStatus}
+                        ${responseObj.formStatus}
                     </div>
                 `;
                 cardContainer.appendChild(card);
+                // Add a click event listener to the card
+                card.addEventListener('click', function() {
+                    routeToSingleResponse(singleResponseURL);
+                });
             });
         }
     }
-
+    function routeToSingleResponse(url) {
+        window.location.href = url;
+    }
 </script>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
