@@ -10,7 +10,7 @@ class Response {
         $values = $response['values'];
         // Extracting relevant fields
         $this->formStatus = $values['formStatus'];
-        $this->formSubmissionDate = $values['endDate'];
+        $this->formSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
         
         foreach ($response['values'] as $key => $value) {
             if (str_starts_with($key, "QID")) {
@@ -36,6 +36,27 @@ class Response {
 
     public function getFormStatus() {
         return $this->formStatus;
+    }
+
+    public function reformatSubmissionDate($formSubmissionDate) {
+        $dateTime = new DateTime($formSubmissionDate);
+        $now = new DateTime();
+
+        $interval = $now->diff($dateTime);
+
+        $years = $interval->y;
+        $months = $interval->m;
+        $days = $interval->d;
+
+        if ($years > 0) {
+            return "Updated " . $years . " year" . ($years > 1 ? "s" : "") . " ago";
+        } elseif ($months > 0) {
+            return "Updated " . $months . " month" . ($months > 1 ? "s" : "") . " ago";
+        } elseif ($days > 0) {
+            return "Updated " . $days . " day" . ($days > 1 ? "s" : "") . " ago";
+        } else {
+            return "Updated " . $hours . " hour" . ($hours > 1 ? "s" : "") . " ago";
+        }
     }
 
     public function getFormSubmissionDate() {

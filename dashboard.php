@@ -75,7 +75,6 @@ Template Name: Dashboard
         event.preventDefault();
 
         // display the clear button
-        document.getElementById('clearButton').style.display = 'inline-block';
         const filterInputValue = document.querySelector('input[name="filterInput"]').value;
 
         // Define the base URL for your custom endpoint
@@ -101,6 +100,16 @@ Template Name: Dashboard
         filter(event);
         // hide the button until a new search
         document.getElementById('clearButton').style.display = 'none';
+    }
+
+    function searchKeyWordUpdate(event) {
+        let input = document.querySelector('.searchTextInput').value;
+        if (!input) {
+            document.getElementById('clearButton').style.display = 'none';
+        } else {
+            filter(event); 
+            document.getElementById('clearButton').style.display = 'inline-block';
+        }
     }
 
     async function handleCheckboxChange(checkbox) {
@@ -212,7 +221,7 @@ Template Name: Dashboard
                     <div class="col-12 mt-3 toolbar">
                         <div class="toolbarLeft">
                             <div class="input-group mb-3" id="search">
-                                <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput" id="searchBar">
+                                <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput" id="searchBar" oninput="searchKeyWordUpdate(event)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" id="clearButton" onclick="clearSearch(event)">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
