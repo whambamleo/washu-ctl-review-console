@@ -46,6 +46,16 @@ class ResponseCollection
         return json_encode($output);
     }
 
+    public function getSingleResponseJSON($responseId) {
+        $output = array();
+        foreach ($this->responses as $response) {
+            if ($response->getResponseId() === $responseId) {
+                $output[] = $response->getJSON();
+            }
+        }
+        return json_encode($output);
+    }
+
     public function getResponseGroupedJSON() {
         $output = array();
         foreach ($this->groupedResponses as $formStatus => $groupedResponse) {
