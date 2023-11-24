@@ -5,6 +5,7 @@ include(get_template_directory() . '/qualtrics.php');
 // Data Models
 include(get_template_directory() . '/classes/Response.php');
 include(get_template_directory() . '/classes/ResponseCollection.php');
+include(get_template_directory() . '/classes/QuestionCollection.php');
 
 function initCustomEndpoints(): void
 {
@@ -141,7 +142,19 @@ function getSingleResponse($data) : string {
     return $responseCollection->getSingleResponseJSON($responseId);
 }
 
-function getQuestions(): string {
-    return getQuestionJSON();
+function getQuestions() {
+//    $questionCollection = get_transient('question_collection');
+//    if (false === $questionCollection) {
+//        try {
+//            $questionCollection = new QuestionCollection();
+//            // Cache the object for 1 hour
+//            set_transient('question_collection', $questionCollection, 60 * 60);
+//        } catch (Exception $e) {
+//            return "Unable to make questionCollection";
+//        }
+//    }
+    $questionCollection = new QuestionCollection(getQuestionJSONFromQualtrics());
+    return $questionCollection->getParsedQuestionsJson();
+//    return getQuestionJSONFromQualtrics();
 }
 ?>
