@@ -9,7 +9,9 @@ Template Name: Single Response
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
         console.log(responseId);
-        fetchSingleResponse(responseId)
+        fetchSingleResponse(responseId);
+        fetchQuestions();
+
     });
 
     // Function to make a request to the /singleResponse endpoint
@@ -25,6 +27,23 @@ Template Name: Single Response
             }
             const data = await response.json();
             renderSingleResponse(JSON.parse(data));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Function to make a request to the /questions endpoint
+    async function fetchQuestions() {
+        const endpointURL = '/review-console/wp-json/console/v1/questions';
+        console.log(endpointURL);
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            console.log(JSON.parse(data));
         } catch (error) {
             console.error(error);
         }

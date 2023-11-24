@@ -146,4 +146,26 @@ function getResponseJSON($fileId) {
         return $response;
     }
 }
+
+function getQuestionJSON() {
+    global $dataCenterId, $surveyId, $api_token;
+
+    $url = "https://$dataCenterId.qualtrics.com/API/v3/survey-definitions/$surveyId/questions";
+    $headers = [
+        "X-API-TOKEN: $api_token",
+        'Content-Type: application/json',
+    ];
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        throw new Exception('Curl error: ' . curl_error($ch));
+    } else {
+        curl_close($ch);
+        return $response;
+    }
+}
 ?>

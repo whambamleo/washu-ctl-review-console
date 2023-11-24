@@ -43,6 +43,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/questions', [
+            'methods' => 'GET',
+            'callback' => 'getQuestions',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -132,5 +139,9 @@ function getSingleResponse($data) : string {
     }
 
     return $responseCollection->getSingleResponseJSON($responseId);
+}
+
+function getQuestions(): string {
+    return getQuestionJSON();
 }
 ?>
