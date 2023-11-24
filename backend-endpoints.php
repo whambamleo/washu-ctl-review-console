@@ -36,6 +36,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/singleResponse', [
+            'methods' => 'GET',
+            'callback' => 'getSingleResponse',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -110,4 +117,20 @@ function getSortedResponsesNewestFirst(): string
     return $responseCollection->getResponseJSON();
 }
 
+function getSingleResponse($data) : string {
+    $responseId = isset($_GET['responseId']) ? sanitize_text_field($_GET['responseId']) : null;
+
+    $responseCollection = get_transient('response_collection');
+    if (false === $responseCollection) {
+        try {
+            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+            // Cache the object for 1 hour
+            set_transient('response_collection', $responseCollection, 60 * 60);
+        } catch (Exception $e) {
+            return "Unable to make responseCollection";
+        }
+    }
+
+    return $responseCollection->getSingleResponseJSON($responseId);
+}
 ?>

@@ -5,18 +5,78 @@ Template Name: Single Response
 ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Parse the current URL
+        // Parse the current URL and get the responseId parameter
         const urlParams = new URLSearchParams(window.location.search);
-
-        // Get the responseId parameter
         const responseId = urlParams.get('responseId');
-
-        // Log it to the console
         console.log(responseId);
-
-        // Now you can use responseId to make your GET request
-        // ...
+        fetchSingleResponse(responseId)
     });
-</script>
 
+    // Function to make a request to the /singleResponse endpoint
+    async function fetchSingleResponse(responseId) {
+        const baseURL = '/review-console/wp-json/console/v1/singleResponse';
+        const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}`;
+        console.log(endpointURL);
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            console.log(data);
+            const h1Element = document.createElement('h1');
+            h1Element.textContent = data;
+
+            // Append the <h1> element inside the existing div with id "responseContainer"
+            const responseContainer = document.getElementById('responseContainer');
+            responseContainer.appendChild(h1Element);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+</script>
+<!--    FontAwesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+<!--    Bootstrap CSS TODO: upgrade everything to 5.2 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<!--    Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" i
+      ntegrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<?php wp_head(); ?>
+
+<!-- Top Banner -->
+<div>
+    <div class="header">
+        <div class="headerLeft">
+            <h2> CTL Review Console </h2>
+        </div>
+        <div class="headerRight">
+            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            <button type="button" class="btn btn-lg headerButton">Help</button>
+        </div>
+    </div>
+    <!-- Main Content Section -->
+    <div class="row">
+        <!-- Left Sidebar -->
+        <div class="col-md-2 sidebar">
+            <ul class="list-group sidebarList">
+                <li class="list-group-item sidebarListItem">Cras justo odio</li>
+                <li class="list-group-item sidebarListItem">Dapibus ac facilisis in</li>
+                <li class="list-group-item sidebarListItem">Morbi leo risus</li>
+                <li class="list-group-item sidebarListItem">Porta ac consectetur ac</li>
+                <li class="list-group-item sidebarListItem">Vestibulum at eros</li>
+            </ul>
+        </div>
+        <!-- Center Content -->
+        <div class="col-md-10">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col" id="responseContainer"></div>
+                </div>
+            </div>
+        </div>
+</div>
 

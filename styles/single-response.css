@@ -1,0 +1,47 @@
+body {
+    color: red;
+}
+
+.header {
+    background-color: #01415A;
+    color: white;
+    height: 125px;
+    margin: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerLeft {
+    height: 100%;
+    width: 30%;
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.headerRight {
+    height: 100%;
+    width: 70%;
+    margin-right: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.header .headerButton {
+    background-color: #01415A;
+    color: white;
+}
+
+.sidebar {
+    background-color: #01415A;
+    height: 100vh;
+}
+
+.sidebarList .sidebarListItem {
+    background-color: #01415A;
+    color: white;
+}

@@ -7,6 +7,10 @@ function enqueue_custom_styles() {
         wp_enqueue_style('dashboard-styles', get_template_directory_uri() . '/styles/dashboard.css', array(), '1.0', 'all');
     }
     // enqueue more stylesheets or add additional conditions here if needed
+    if (is_page_template('single-response.php')) {
+        // Enqueue the main stylesheet
+        wp_enqueue_style('single-response-styles', get_template_directory_uri() . '/styles/single-response.css', array(), '1.0', 'all');
+    }
 }
 
 // Hook into the 'wp_enqueue_scripts' action
