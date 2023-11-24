@@ -253,9 +253,9 @@ Template Name: Dashboard
                                     Sort By
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="sortDropdown">
-                                    <a class="dropdown-item" href="#" onclick="getSortedResponsesNewestFirst()">Newest
+                                    <a class="dropdown-item" onclick="getSortedResponsesNewestFirst()">Newest
                                         First</a>
-                                    <a class="dropdown-item" href="#" onclick="getResponses()">
+                                    <a class="dropdown-item" onclick="getResponses()">
                                         Oldest First </a>
                                 </div>
                             </div>

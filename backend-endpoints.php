@@ -143,18 +143,16 @@ function getSingleResponse($data) : string {
 }
 
 function getQuestions() {
-//    $questionCollection = get_transient('question_collection');
-//    if (false === $questionCollection) {
-//        try {
-//            $questionCollection = new QuestionCollection();
-//            // Cache the object for 1 hour
-//            set_transient('question_collection', $questionCollection, 60 * 60);
-//        } catch (Exception $e) {
-//            return "Unable to make questionCollection";
-//        }
-//    }
-    $questionCollection = new QuestionCollection(getQuestionJSONFromQualtrics());
+    $questionCollection = get_transient('question_collection');
+    if (false === $questionCollection) {
+        try {
+            $questionCollection = new QuestionCollection(getQuestionJSONFromQualtrics());
+            // Cache the object for 1 hour
+            set_transient('question_collection', $questionCollection, 60 * 60);
+        } catch (Exception $e) {
+            return "Unable to make questionCollection";
+        }
+    }
     return $questionCollection->getParsedQuestionsJson();
-//    return getQuestionJSONFromQualtrics();
 }
 ?>
