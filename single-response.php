@@ -24,15 +24,40 @@ Template Name: Single Response
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            console.log(data);
-            const h1Element = document.createElement('h1');
-            h1Element.textContent = data;
-
-            // Append the <h1> element inside the existing div with id "responseContainer"
-            const responseContainer = document.getElementById('responseContainer');
-            responseContainer.appendChild(h1Element);
+            renderSingleResponse(JSON.parse(data));
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    function renderSingleResponse(response) {
+        const responseObj = JSON.parse(response);
+
+        const responseContainer = document.getElementById('responseContainer');
+        responseContainer.innerHTML = ''; // Clear existing content
+
+        // Create and append HTML elements for each field
+        const responseIdElement = document.createElement('p');
+        responseIdElement.textContent = `Response ID: ${responseObj.responseId}`;
+        responseContainer.appendChild(responseIdElement);
+
+        const formStatusElement = document.createElement('p');
+        formStatusElement.textContent = `Form Status: ${responseObj.formStatus}`;
+        responseContainer.appendChild(formStatusElement);
+
+        const formSubmissionDateElement = document.createElement('p');
+        formSubmissionDateElement.textContent = `Form Submission Date: ${responseObj.formSubmissionDate}`;
+        responseContainer.appendChild(formSubmissionDateElement);
+
+        // Assuming formQuestionResponses is an object
+        const formQuestionResponses = responseObj.formQuestionResponses;
+
+        for (const key in formQuestionResponses) {
+            if (formQuestionResponses.hasOwnProperty(key)) {
+                const questionElement = document.createElement('p');
+                questionElement.textContent = `${key}: ${formQuestionResponses[key]}`;
+                responseContainer.appendChild(questionElement);
+            }
         }
     }
 </script>
