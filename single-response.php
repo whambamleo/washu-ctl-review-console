@@ -29,6 +29,7 @@ Template Name: Single Response
             }
             const data = await response.json();
             console.log(data);
+            window.location.reload();
         } catch (error) {
             console.error(error);
         }
@@ -83,6 +84,10 @@ Template Name: Single Response
         const formStatusElement = document.createElement('p');
         formStatusElement.textContent = `Form Status: ${responseObj.formStatus}`;
         responseContainer.appendChild(formStatusElement);
+
+        const archivedElement = document.createElement('p');
+        archivedElement.textContent = `Archived: ${responseObj.archived}`;
+        responseContainer.appendChild(archivedElement);
 
         const formSubmissionDateElement = document.createElement('p');
         formSubmissionDateElement.textContent = `Form Submission Date: ${responseObj.formSubmissionDate}`;
@@ -139,6 +144,7 @@ Template Name: Single Response
             <div class="container mt-4">
                 <div class="row">
                     <button onclick="setEmbeddedData('archived','true')">Archive</button>
+                    <button onclick="setEmbeddedData('archived','false')">Unarchive</button>
                     <div class="col" id="responseContainer"></div>
                 </div>
             </div>

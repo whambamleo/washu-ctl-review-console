@@ -168,6 +168,17 @@ function setEmbeddedData($data) : string {
     $fieldName = isset($_GET['fieldName']) ? sanitize_text_field($_GET['fieldName']) : null;
     $fieldValue = isset($_GET['fieldValue']) ? sanitize_text_field($_GET['fieldValue']) : null;
 
-    return setEmbeddedDataField($responseId, $fieldName, $fieldValue);
+    $response = setEmbeddedDataField($responseId, $fieldName, $fieldValue);
+
+    // Reset the cache with latest values
+    try {
+        $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+        // Cache the object for 1 hour
+        set_transient('response_collection', $responseCollection, 60 * 60);
+    } catch (Exception $e) {
+        return "Unable to make responseCollection";
+    }
+
+    return $response;
 }
 ?>

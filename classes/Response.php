@@ -2,6 +2,7 @@
 class Response {
     private $responseId;
     private $formStatus;
+    private $archived;
     private $formSubmissionDate;
     private $formQuestionResponses;
 
@@ -10,6 +11,7 @@ class Response {
         $values = $response['values'];
         // Extracting relevant fields
         $this->formStatus = $values['formStatus'];
+        $this->archived = $values['archived'];
         $this->formSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
         
         foreach ($response['values'] as $key => $value) {
@@ -23,6 +25,7 @@ class Response {
         $json_data = [
             'responseId' => $this->responseId,
             'formStatus' => $this->formStatus,
+            'archived' => $this->archived,
             'formSubmissionDate' => $this->formSubmissionDate,
             'formQuestionResponses' => $this->formQuestionResponses
         ];
@@ -47,6 +50,7 @@ class Response {
         $years = $interval->y;
         $months = $interval->m;
         $days = $interval->d;
+        $hours = $interval->h;
 
         if ($years > 0) {
             return "Updated " . $years . " year" . ($years > 1 ? "s" : "") . " ago";
