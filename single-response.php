@@ -14,6 +14,26 @@ Template Name: Single Response
 
     });
 
+    // Function to make a request to the /setEmbeddedData endpoint
+    async function setEmbeddedData(fieldName, fieldValue) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const responseId = urlParams.get('responseId');
+        const baseURL = '/review-console/wp-json/console/v1/setEmbeddedData';
+        const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}&fieldName=${encodeURIComponent(fieldName)}&fieldValue=${encodeURIComponent(fieldValue)}`;
+        console.log(endpointURL);
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     // Function to make a request to the /singleResponse endpoint
     async function fetchSingleResponse(responseId) {
         const baseURL = '/review-console/wp-json/console/v1/singleResponse';
@@ -118,6 +138,7 @@ Template Name: Single Response
         <div class="col-md-10">
             <div class="container mt-4">
                 <div class="row">
+                    <button onclick="setEmbeddedData('archived','true')">Archive</button>
                     <div class="col" id="responseContainer"></div>
                 </div>
             </div>

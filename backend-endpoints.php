@@ -51,6 +51,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/setEmbeddedData', [
+            'methods' => 'GET',
+            'callback' => 'setEmbeddedData',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -154,5 +161,13 @@ function getQuestions() {
         }
     }
     return $questionCollection->getParsedQuestionsJson();
+}
+
+function setEmbeddedData($data) : string {
+    $responseId = isset($_GET['responseId']) ? sanitize_text_field($_GET['responseId']) : null;
+    $fieldName = isset($_GET['fieldName']) ? sanitize_text_field($_GET['fieldName']) : null;
+    $fieldValue = isset($_GET['fieldValue']) ? sanitize_text_field($_GET['fieldValue']) : null;
+
+    return setEmbeddedDataField($responseId, $fieldName, $fieldValue);
 }
 ?>
