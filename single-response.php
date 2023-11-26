@@ -137,7 +137,7 @@ Template Name: Single Response
                 Swal.fire('Confirmed!', 'Response was Deleted', 'success');
                 // TODO: re-direct to dashboard
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire('Canceled', 'Your action was canceled', 'info');
+                Swal.fire('Cancelled', 'Your action was cancelled', 'info');
             }
         });
     }
