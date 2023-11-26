@@ -8,7 +8,6 @@ Template Name: Single Response
         // Parse the current URL and get the responseId parameter
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
-        console.log(responseId);
         renderContent(responseId);
     });
 
@@ -25,14 +24,11 @@ Template Name: Single Response
     }
 
     function matchQuestionsAndResponses(responses, questions) {
-        console.log("responses: ", JSON.parse(responses));
-        console.log("questions: ", questions.result.elements);
         questions = questions.result.elements;
         responses = JSON.parse(responses).formQuestionResponses;
 
         let questionsAndAnswers = {};
         for(let i = 0; i < questions.length; i++) {
-            console.log(questions[i].QuestionDescription);
             // Form Questions with string responses come with an ID of "QIDxx_TEXT", but boolean responses come with just "QIDxx"
             if (responses.hasOwnProperty(questions[i].QuestionID)) {
                 questionsAndAnswers[questions[i].QuestionDescription] = responses[questions[i].QuestionID];
@@ -40,15 +36,15 @@ Template Name: Single Response
                 questionsAndAnswers[questions[i].QuestionDescription] = responses[questions[i].QuestionID + "_TEXT"];
             }
         }
-        console.log(questionsAndAnswers);
         return questionsAndAnswers
+    }
+
     // Function to make a request to the /setEmbeddedData endpoint
     async function setEmbeddedData(fieldName, fieldValue) {
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
         const baseURL = '/review-console/wp-json/console/v1/setEmbeddedData';
         const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}&fieldName=${encodeURIComponent(fieldName)}&fieldValue=${encodeURIComponent(fieldValue)}`;
-        console.log(endpointURL);
 
         try {
             const response = await fetch(endpointURL);
@@ -56,10 +52,34 @@ Template Name: Single Response
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            console.log(data);
             window.location.reload();
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    // checks if the embeddedData to be changed is archiving and alerts users.
+    async function checkBeforeSettingEmbeddedData(fieldName, fieldValue) {
+        if (fieldName === 'archived' && fieldValue === 'true') {
+            Swal.fire({
+                title: 'Archive?',
+                text: 'Are you sure you want to archive this response?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Archive',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // TODO: call the delete backend
+                    setEmbeddedData(fieldName, fieldValue);
+                    Swal.fire('Confirmed!', 'Response has been archived', 'success');
+                    // TODO: re-direct to dashboard
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Canceled', 'Response has not been archived', 'info');
+                }
+            });
+        } else {
+            setEmbeddedData(fieldName, fieldValue);
         }
     }
 
@@ -67,7 +87,6 @@ Template Name: Single Response
     async function fetchSingleResponse(responseId) {
         const baseURL = '/review-console/wp-json/console/v1/singleResponse';
         const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}`;
-        console.log(endpointURL);
 
         try {
             const response = await fetch(endpointURL);
@@ -85,7 +104,6 @@ Template Name: Single Response
     // Function to make a request to the /questions endpoint
     async function fetchQuestions() {
         const endpointURL = '/review-console/wp-json/console/v1/questions';
-        console.log(endpointURL);
 
         try {
             const response = await fetch(endpointURL);
@@ -94,19 +112,18 @@ Template Name: Single Response
             }
             const data = await response.json();
             return JSON.parse(data);
-            console.log(JSON.parse(data));
         } catch (error) {
             console.error(error);
         }
     }
 
     async function changeStatus(newStatus) {
-        console.log("changing Status to: ", newStatus);
+        const statusHeader = document.getElementById("statusHeader");
+        statusHeader.innerHTML = `Status: ${newStatus}`;
         // TODO: call the change status backend
     }
 
     async function deleteTicket() {
-        console.log("deleting");
         Swal.fire({
             title: 'Delete Warning!',
             text: 'Are you sure you want to delete this ticket?',
@@ -126,14 +143,12 @@ Template Name: Single Response
     }
 
     function saveChanges() {
-        console.log("saving");
         const changes = [];
-        let form = document.getElementById("responseContainer");
+        const form = document.getElementById("responseContainer");
         // get the labels and textarea responses of the form submission.
         // cannot use the names of the textareas because both the names and number
         // of elements in the form can change if the Qualtrics form changes.
         // loop goes till length-1 because save button is the last element.
-        console.log(form.elements);
         for (let i = 0; i < form.elements.length - 1; i++) {
             let element = form.elements[i];
             if (element.tagName.toLowerCase() === "textarea") {
@@ -142,7 +157,7 @@ Template Name: Single Response
         }
 
         // TODO: call backend with changes so that it can save the changes
-
+        console.log(changes);
         // hide the saveChanges button
         const saveBtn = document.getElementById('saveChangesBtn');
         saveBtn.style.display = 'none';
@@ -150,11 +165,16 @@ Template Name: Single Response
         // show the edit button
         const editBtn = document.getElementById('editBtn');
         editBtn.style.display = 'inline-block';
+
+        // make all responses readonly
+        const responseElements = document.querySelectorAll('.response');
+        responseElements.forEach(element => {
+            element.setAttribute('readonly', true);
+        });
         return false;
     }
 
     async function editTicket() {
-        console.log("editing");
         // make all responses editable
         const responseElements = document.querySelectorAll('.response');
         responseElements.forEach(element => {
@@ -198,6 +218,7 @@ Template Name: Single Response
 
     function renderSingleResponse(formInfo, fullResponse) {
         const responseObj = JSON.parse(fullResponse);
+        console.log(responseObj);
         const responseContainer = document.getElementById('responseContainer');
         responseContainer.innerHTML = ''; // Clear existing content
 
@@ -230,6 +251,11 @@ Template Name: Single Response
         const formSubmissionDateElement = document.createElement('p');
         formSubmissionDateElement.textContent = `${responseObj.formSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
+
+        // update the archive dropdown to reflect archiving status
+        const archived = document.getElementById('archiveDropdown');
+        archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
+        console.log(archived.value);
     }
 </script>
 <!--    FontAwesome CSS -->
@@ -272,7 +298,6 @@ Template Name: Single Response
                 <div class="row justify-content-center">
                     <div class="col-md-7" id="Headers">
                         <div class="subHeaderLeft">
-                            <h1 id="statusHeader"></h1>
                         </div>
                     </div>
                     <div class="col-md-3" id="Headers">
@@ -291,23 +316,28 @@ Template Name: Single Response
                                         <a class="dropdown-item" onclick="changeStatus(`ServiceNow`)">Tool Review Via ServiceNow</a>
                                     </div>
                             </div>
+                            <div class="dropdown">
+                                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="archiveDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Archive
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="sortDropdown">
+                                        <a class="dropdown-item" onclick="checkBeforeSettingEmbeddedData('archived','true')">Archive</a>
+                                        <a class="dropdown-item" onclick="checkBeforeSettingEmbeddedData('archived','false')">Unarchive</a>
+                                    </div>
+                            </div>
                             <button class="btn btn-outline-secondary" id="editBtn" onclick="editTicket()"> Edit </button>
                             <button class="btn btn-danger" id="button-addon2" onclick="deleteTicket()"> Delete </button>
                         </div>
                    </div>
               </div>
               <div class="row justify-content-center">
-                  <div class="col-md-10">
+                  <div class="col-md-10" id="mainResponseContent">
+                        <h1 id="statusHeader"></h1>
                         <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
 
                         </form>
                   </div>
               </div>
-                <div class="row">
-                    <button onclick="setEmbeddedData('archived','true')">Archive</button>
-                    <button onclick="setEmbeddedData('archived','false')">Unarchive</button>
-                    <div class="col" id="responseContainer"></div>
-                </div>
             </div>
         </div>
 </div>
