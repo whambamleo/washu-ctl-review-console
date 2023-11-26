@@ -198,4 +198,30 @@ function getResponseJSON($fileId) {
         return $response;
     }
 }
+
+function deleteResponseFromQualtrics($data) {
+    global $api_token, $surveyId, $dataCenterId;
+    
+    $responseId = $data['responseId'];
+    $url = "https://{$dataCenterId}.qualtrics.com/API/v3/surveys/{$surveyId}/responses/{$responseId}";
+
+    $args = array(
+        'method' => 'DELETE',
+        'headers' => array(
+            'X-API-TOKEN' => $api_token,
+            'Content-Type' => 'application/json'
+        )
+    );
+
+    $response = wp_remote_request($url, $args);
+    $response_code = wp_remote_retrieve_response_code($response);
+
+    if ($response_code == 200) {
+        delete_transient('response_collection');
+        return new WP_REST_Response(['success' => true], 200);
+    } else {
+        return new WP_REST_Response(['success' => false], $response_code);
+    }
+}
+
 ?>

@@ -58,6 +58,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/deleteResponse', [
+            'methods' => 'DELETE',
+            'callback' => 'deleteResponseFromQualtrics',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -148,6 +155,21 @@ function getSingleResponse($data) : string {
 
     return $responseCollection->getSingleResponseJSON($responseId);
 }
+
+function deleteResponse(WP_REST_Request $request) {
+    // Extract the responseId from the request
+    $responseId = $request->get_param('responseId');
+
+    // Check if responseId is provided
+    if (!$responseId) {
+        return new WP_REST_Response(['success' => false, 'message' => 'Response ID not provided'], 400);
+    }
+
+    // Call the function to delete the response in Qualtrics
+    return deleteResponseFromQualtrics(['responseId' => $responseId]);
+}
+
+
 
 function getQuestions() {
     $questionCollection = get_transient('question_collection');

@@ -124,23 +124,43 @@ Template Name: Single Response
     }
 
     async function deleteResponse() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const responseId = urlParams.get('responseId');
+
+        if (!responseId) {
+            alert('Response ID is missing.');
+            return;
+        }
+
         Swal.fire({
             title: 'Delete Warning!',
             text: 'Are you sure you want to delete this response?',
-            icon: 'info',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Delete',
             cancelButtonText: 'Cancel',
         }).then((result) => {
             if (result.isConfirmed) {
-                // TODO: call the delete backend
-                Swal.fire('Confirmed!', 'Response was Deleted', 'success');
-                // TODO: re-direct to dashboard
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire('Canceled', 'Your action was canceled', 'info');
+                fetch(`/review-console/wp-json/console/v1/deleteResponse?responseId=${encodeURIComponent(responseId)}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Confirmed!', 'Response was deleted successfully', 'success');
+                        window.location.href = 'https://yujunectl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+                    } else {
+                        Swal.fire('Failed!', 'Failed to delete response', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'An error occurred while deleting the response', 'error');
+                });
             }
         });
     }
+
 
     function saveChanges() {
         const changes = [];
