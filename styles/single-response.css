@@ -45,3 +45,43 @@ body {
     background-color: #01415A;
     color: white;
 }
+
+.subHeaderLeft {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.subHeaderRight {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.statusHeader {
+    font-size: 2em;
+}
+
+#responseContainer {
+    padding: 20px;
+}
+
+.question {
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.response {
+    display: block;
+    border: 1px solid grey;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 3px solid grey;
+    border-right: 3px solid grey;
+}
+
+.saveBtnContainer {
+    text-align: right;
+  }

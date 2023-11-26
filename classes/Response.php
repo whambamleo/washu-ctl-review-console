@@ -47,15 +47,16 @@ class Response {
         $years = $interval->y;
         $months = $interval->m;
         $days = $interval->d;
+        $hours = $interval->h;
 
         if ($years > 0) {
-            return "Updated " . $years . " year" . ($years > 1 ? "s" : "") . " ago";
+            return "Submitted " . $years . " year" . ($years > 1 ? "s" : "") . " ago";
         } elseif ($months > 0) {
-            return "Updated " . $months . " month" . ($months > 1 ? "s" : "") . " ago";
+            return "Submitted " . $months . " month" . ($months > 1 ? "s" : "") . " ago";
         } elseif ($days > 0) {
-            return "Updated " . $days . " day" . ($days > 1 ? "s" : "") . " ago";
+            return "Submitted " . $days . " day" . ($days > 1 ? "s" : "") . " ago";
         } else {
-            return "Updated " . $hours . " hour" . ($hours > 1 ? "s" : "") . " ago";
+            return "Submitted " . $hours . " hour" . ($hours > 1 ? "s" : "") . " ago";
         }
     }
 
