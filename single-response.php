@@ -2,6 +2,8 @@
 /*
 Template Name: Single Response
 */
+$responseId = isset($_GET['responseId']) ? sanitize_text_field($_GET['responseId']) : '';
+
 ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -79,6 +81,24 @@ Template Name: Single Response
             }
         }
     }
+
+    function deleteResponse(responseId) {
+            fetch('/wp-json/console/v1/deleteResponse/' + responseId, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Response deleted successfully');
+                    window.location.href = '/dashboard'; // Redirect or handle UI update
+                } else {
+                    alert('Failed to delete response');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        
 </script>
 <!--    FontAwesome CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -119,6 +139,12 @@ Template Name: Single Response
             <div class="container mt-4">
                 <div class="row">
                     <div class="col" id="responseContainer"></div>
+                </div>
+                <!-- Place this in the body where you want the button to appear -->
+                <div class="deleteButton">
+                    <?php if ($responseId): ?>
+                    <button id="deleteButton" onclick="deleteResponse('<?php echo $responseId; ?>')">Delete Response</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

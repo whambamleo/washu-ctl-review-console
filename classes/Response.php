@@ -47,6 +47,7 @@ class Response {
         $years = $interval->y;
         $months = $interval->m;
         $days = $interval->d;
+        $hours = $interval->h;
 
         if ($years > 0) {
             return "Updated " . $years . " year" . ($years > 1 ? "s" : "") . " ago";

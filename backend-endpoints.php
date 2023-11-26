@@ -7,6 +7,12 @@ include(get_template_directory() . '/classes/Response.php');
 include(get_template_directory() . '/classes/ResponseCollection.php');
 include(get_template_directory() . '/classes/QuestionCollection.php');
 
+$api_config = include('qualtrics_config.php');
+$dataCenterId = $api_config['dataCenterId'];
+$api_token = $api_config['x-api-token'];
+$surveyId = $api_config['surveyId'];
+global $dataCenterId, $surveyId, $api_token;
+
 function initCustomEndpoints(): void
 {
     add_action('rest_api_init', function () {
@@ -51,6 +57,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/deleteResponse', [
+            'methods' => 'DELETE',
+            'callback' => 'deleteResponse',
+            'permission_callback' => '__return_true',
+        ]);
+    });    
 }
 
 function getResponses(): string
@@ -154,5 +167,9 @@ function getQuestions() {
         }
     }
     return $questionCollection->getParsedQuestionsJson();
+}
+
+function deleteResponse() {
+
 }
 ?>

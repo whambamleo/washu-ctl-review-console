@@ -168,4 +168,41 @@ function getResponseJSON($fileId) {
         return $response;
     }
 }
+
+function deleteResponseFromQualtrics($data) {
+    global $api_token, $surveyId, $dataCenterId;
+
+    // Extract the responseId from the request data
+    $responseId = $data['responseId'];
+
+    // Construct the URL for the DELETE request
+    $url = "https://{$dataCenterId}.qualtrics.com/API/v3/surveys/{$surveyId}/responses/{$responseId}";
+
+    // Set up the arguments for the request, including the headers
+    $args = array(
+        'method' => 'DELETE',
+        'headers' => array(
+            'X-API-TOKEN' => $api_token,
+            'Content-Type' => 'application/json'
+        )
+    );
+
+    // Make the request to the Qualtrics API
+    $response = wp_remote_request($url, $args);
+
+    // Check for errors in the response
+    if (is_wp_error($response)) {
+        return new WP_REST_Response(['success' => false, 'message' => $response->get_error_message()], 500);
+    }
+
+    // Retrieve the response code
+    $response_code = wp_remote_retrieve_response_code($response);
+
+    // Return an appropriate response based on the result
+    if ($response_code == 200) {
+        return new WP_REST_Response(['success' => true, 'message' => 'Response deleted successfully'], 200);
+    } else {
+        return new WP_REST_Response(['success' => false, 'message' => 'Failed to delete response'], $response_code);
+    }
+}
 ?>
