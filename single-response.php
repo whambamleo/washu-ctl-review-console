@@ -123,10 +123,10 @@ Template Name: Single Response
         // TODO: call the change status backend
     }
 
-    async function deleteTicket() {
+    async function deleteResponse() {
         Swal.fire({
             title: 'Delete Warning!',
-            text: 'Are you sure you want to delete this ticket?',
+            text: 'Are you sure you want to delete this response?',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Delete',
@@ -134,7 +134,7 @@ Template Name: Single Response
         }).then((result) => {
             if (result.isConfirmed) {
                 // TODO: call the delete backend
-                Swal.fire('Confirmed!', 'Ticket was Deleted', 'success');
+                Swal.fire('Confirmed!', 'Response was Deleted', 'success');
                 // TODO: re-direct to dashboard
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire('Canceled', 'Your action was canceled', 'info');
@@ -174,7 +174,7 @@ Template Name: Single Response
         return false;
     }
 
-    async function editTicket() {
+    async function editResponse() {
         // make all responses editable
         const responseElements = document.querySelectorAll('.response');
         responseElements.forEach(element => {
@@ -325,8 +325,8 @@ Template Name: Single Response
                                         <a class="dropdown-item" onclick="checkBeforeSettingEmbeddedData('archived','false')">Unarchive</a>
                                     </div>
                             </div>
-                            <button class="btn btn-outline-secondary" id="editBtn" onclick="editTicket()"> Edit </button>
-                            <button class="btn btn-danger" id="button-addon2" onclick="deleteTicket()"> Delete </button>
+                            <button class="btn btn-outline-secondary" id="editBtn" onclick="editResponse()"> Edit </button>
+                            <button class="btn btn-danger" id="button-addon2" onclick="deleteResponse()"> Delete </button>
                         </div>
                    </div>
               </div>
