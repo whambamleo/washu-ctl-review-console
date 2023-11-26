@@ -60,6 +60,36 @@ function getQuestionJSONFromQualtrics() {
     }
 }
 
+function setEmbeddedDataField($responseId, $fieldName, $fieldValue) {
+    global $dataCenterId, $surveyId, $api_token;
+    $url = "https://$dataCenterId.qualtrics.com/API/v3/responses/$responseId";
+
+    $headers = [
+        "X-API-TOKEN: $api_token",
+        'Content-Type: application/json',
+    ];
+    $data = [
+        'surveyId' => $surveyId,
+        'embeddedData' => [
+            $fieldName => $fieldValue
+        ]
+    ];
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        throw new Exception('Curl error: ' . curl_error($ch));
+    } else {
+        curl_close($ch);
+        return $response;
+    }
+}
+
 /**
  * Initiates a generic response export and returns a progressID for
  * following calls
