@@ -224,4 +224,43 @@ function deleteResponseFromQualtrics($data) {
     }
 }
 
+function editResponseInQualtrics($responseId, $updates) {
+    global $api_token, $surveyId, $dataCenterId;
+
+    $url = "https://{$dataCenterId}.qualtrics.com/API/v3/surveys/{$surveyId}/responses/{$responseId}";
+
+    $body = [
+        'surveyId' => $surveyId,
+        'embeddedData' => $updates
+    ];
+
+    $args = [
+        'method' => 'PUT',
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'X-API-TOKEN' => $api_token
+        ],
+        'body' => json_encode($body),
+        'data_format' => 'body'
+    ];
+
+    $response = wp_remote_request($url, $args);
+
+    if (is_wp_error($response)) {
+        return $response;
+    }
+
+    $response_code = wp_remote_retrieve_response_code($response);
+    $response_body = json_decode(wp_remote_retrieve_body($response), true);
+
+    if ($response_code === 200) {
+        return true;
+    } else {
+        return new WP_Error('qualtrics_update_failed', 'The response update failed.', [
+            'status' => $response_code,
+            'response' => $response_body
+        ]);
+    }
+}
+
 ?>

@@ -164,22 +164,37 @@ Template Name: Single Response
     }
 
 
-    function saveChanges() {
-        const changes = [];
-        const form = document.getElementById("responseContainer");
+    async function saveChanges(fieldName, fieldValue) {
+        // const changes = [];
+        // const form = document.getElementById("responseContainer");
+        // const responseId = new URLSearchParams(window.location.search).get('responseId');
+        // const updatedResponses = {};
         // get the labels and textarea responses of the form submission.
         // cannot use the names of the textareas because both the names and number
         // of elements in the form can change if the Qualtrics form changes.
         // loop goes till length-1 because save button is the last element.
-        for (let i = 0; i < form.elements.length - 1; i++) {
+
+        const form = document.getElementById("responseContainer");
+        // const responseId = new URLSearchParams(window.location.search).get('responseId');
+        const updates = {};
+        // for (let i = 0; i < form.elements.length - 1; i++) {
+        //     let element = form.elements[i];
+        //     if (element.tagName.toLowerCase() === "textarea") {
+        //         changes.push(element.value);
+        //     }
+        // }
+
+        for (let i = 0; i < form.elements.length -1; i++) {
             let element = form.elements[i];
-            if (element.tagName.toLowerCase() === "textarea") {
-                changes.push(element.value);
+            if (element.tagName.toLowerCase() === "textarea" && element.name) {
+                updates[element.name] = element.value;
             }
         }
 
+        
+
         // TODO: call backend with changes so that it can save the changes
-        console.log(changes);
+        console.log(updates);
         // hide the saveChanges button
         const saveBtn = document.getElementById('saveChangesBtn');
         saveBtn.style.display = 'none';
@@ -193,7 +208,47 @@ Template Name: Single Response
         responseElements.forEach(element => {
             element.setAttribute('readonly', true);
         });
-        return false;
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const responseId = urlParams.get('responseId');
+        const baseURL = '/review-console/wp-json/console/v1/setEmbeddedData';
+        const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}&fieldName=${encodeURIComponent(fieldName)}&fieldValue=${encodeURIComponent(fieldValue)}`;
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const data = await response.json();
+            // window.location.reload();
+        } catch (error) {
+            console.error(error);
+        } 
+        return false
+        // fetch('/review-console/wp-json/console/v1/editResponse', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         responseId: responseId,
+        //         updates: updates
+        //     }),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (data.success) {
+        //         console.log('Changes saved successfully!');
+        //     } else {
+        //         console.error('Failed to save changes: ' + data.message);
+        //     }
+        // })
+        // .catch(error => {
+        //     console.error('Error:', error);
+        // });
+
+        // return false;
     }
 
     async function editResponse() {
@@ -355,7 +410,7 @@ Template Name: Single Response
               <div class="row justify-content-center">
                   <div class="col-md-10" id="mainResponseContent">
                         <h1 id="statusHeader"></h1>
-                        <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
+                        <form id="responseContainer" action="" method="post" onsubmit="return saveChanges('archived','true')">
 
                         </form>
                   </div>

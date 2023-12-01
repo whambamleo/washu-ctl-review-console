@@ -65,6 +65,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/editResponse', [
+            'methods' => 'GET',
+            'callback' => 'setEmbeddedData',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -203,4 +210,27 @@ function setEmbeddedData($data) : string {
 
     return $response;
 }
+
+function handle_save_changes($request) {
+    $params = $request->get_json_params();
+    $responseId = isset($params['responseId']) ? sanitize_text_field($params['responseId']) : null;
+    $updates = $params['updates'];
+
+    $qualtricsUpdates = [];
+    foreach ($updates as $questionKey => $responseValue) {
+        $qualtricsUpdates[$questionKey] = $responseValue;
+    }
+
+    $update_result = editResponseInQualtrics($responseId, $qualtricsUpdates);
+
+    if (is_wp_error($update_result)) {
+        return new WP_Error('qualtrics_update_failed', $update_result->get_error_message());
+    }
+
+    return rest_ensure_response(array(
+        'success' => true,
+        'message' => 'All responses updated successfully.'
+    ));
+}
+
 ?>
