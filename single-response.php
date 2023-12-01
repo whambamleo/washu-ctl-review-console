@@ -52,6 +52,7 @@ Template Name: Single Response
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
+            // TODO: Add spinner until reload
             window.location.reload();
         } catch (error) {
             console.error(error);
@@ -120,7 +121,7 @@ Template Name: Single Response
     async function changeStatus(newStatus) {
         const statusHeader = document.getElementById("statusHeader");
         statusHeader.innerHTML = `Status: ${newStatus}`;
-        // TODO: call the change status backend
+        checkBeforeSettingEmbeddedData('formStatus', newStatus);
     }
 
     async function deleteResponse() {
@@ -330,12 +331,12 @@ Template Name: Single Response
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="sortDropdown">
                                         <a class="dropdown-item" onclick="changeStatus(`Submitted`)">Submitted</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`ToolConsultation`)">Tool Consultation</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`ToolExploration`)">Tool Exploration</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`ToolTesting`)">Tool Testing</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`ProposalForFunding`)">Report/Proposal for Funding</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`GovernanceRecommendation`)">Governance Recommendation</a>
-                                        <a class="dropdown-item" onclick="changeStatus(`ServiceNow`)">Tool Review Via ServiceNow</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Tool Consultation`)">Tool Consultation</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Tool Exploration`)">Tool Exploration</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Tool Testing`)">Tool Testing</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Proposal For Funding`)">Report/Proposal for Funding</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Governance Recommendation`)">Governance Recommendation</a>
+                                        <a class="dropdown-item" onclick="changeStatus(`Review via ServiceNow`)">Tool Review Via ServiceNow</a>
                                     </div>
                             </div>
                             <div class="dropdown">
