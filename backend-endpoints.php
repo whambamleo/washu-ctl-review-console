@@ -67,7 +67,7 @@ function initCustomEndpoints(): void
     });
     add_action('rest_api_init', function () {
         register_rest_route('console/v1', '/editResponse', [
-            'methods' => 'POST',
+            'methods' => 'PUT',
             'callback' => 'editResponseInQualtrics',
             'permission_callback' => '__return_true',
         ]);

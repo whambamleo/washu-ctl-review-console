@@ -224,9 +224,57 @@ function deleteResponseFromQualtrics($data) {
     }
 }
 
-function editResponseInQualtrics() {
-    return new WP_REST_Response(['success' => true, 'message' => 'Endpoint reached'], 200);
+// function editResponseInQualtrics() {
+//     return new WP_REST_Response(['success' => true, 'message' => 'Endpoint reached'], 200);
+// }
+
+function editResponseInQualtrics($responseId, $updates) {
+    global $api_token, $surveyId, $dataCenterId;
+
+    // Construct the URL for the Qualtrics API
+    $url = "https://{$dataCenterId}.qualtrics.com/API/v3/surveys/{$surveyId}/responses/{$responseId}";
+
+    // Prepare the headers and body for the API request
+    $headers = [
+        'Content-Type' => 'application/json',
+        'X-API-TOKEN' => $api_token
+    ];
+
+    // Prepare the body. Assuming updates are in the form of 'QIDx_TEXT' => 'response'
+    $body = [
+        'surveyId' => $surveyId,
+        'responses' => $updates  // Adjust this line according to the exact Qualtrics API requirements
+    ];
+
+    $args = [
+        'method' => 'PUT', // Ensure 'PUT' is the correct method as per Qualtrics API
+        'headers' => $headers,
+        'body' => json_encode($body),
+        'data_format' => 'body'
+    ];
+
+    // Make the API request
+    $response = wp_remote_request($url, $args);
+
+    // Error handling
+    if (is_wp_error($response)) {
+        return new WP_Error('qualtrics_update_failed', $response->get_error_message(), [
+            'status' => wp_remote_retrieve_response_code($response)
+        ]);
+    }
+
+    $response_code = wp_remote_retrieve_response_code($response);
+    $response_body = json_decode(wp_remote_retrieve_body($response), true);
+
+    // Check for successful response
+    if ($response_code === 200) {
+        return new WP_REST_Response(['success' => true, 'message' => 'Response updated successfully.'], 200);
+    } else {
+        return new WP_REST_Response(['success' => false, 'message' => $response_body['error']['message'] ?? 'Unknown error'], $response_code);
+    }
 }
+
+
 
 // function editResponseInQualtrics($responseId, $updates) {
 //     global $api_token, $surveyId, $dataCenterId;

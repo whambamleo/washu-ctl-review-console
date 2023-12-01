@@ -179,7 +179,7 @@ Template Name: Single Response
 
     // Make the API request to update the response
     fetch('/review-console/wp-json/console/v1/editResponse', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -446,7 +446,7 @@ Template Name: Single Response
               <div class="row justify-content-center">
                   <div class="col-md-10" id="mainResponseContent">
                         <h1 id="statusHeader"></h1>
-                        <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
+                        <form id="responseContainer" action="" method="put" onsubmit="return saveChanges()">
 
                         </form>
                   </div>
