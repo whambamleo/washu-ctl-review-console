@@ -67,8 +67,8 @@ function initCustomEndpoints(): void
     });
     add_action('rest_api_init', function () {
         register_rest_route('console/v1', '/editResponse', [
-            'methods' => 'GET',
-            'callback' => 'setEmbeddedData',
+            'methods' => 'POST',
+            'callback' => 'editResponseInQualtrics',
             'permission_callback' => '__return_true',
         ]);
     });
@@ -211,26 +211,37 @@ function setEmbeddedData($data) : string {
     return $response;
 }
 
-function handle_save_changes($request) {
+
+function editResponse($request) {
     $params = $request->get_json_params();
     $responseId = isset($params['responseId']) ? sanitize_text_field($params['responseId']) : null;
     $updates = $params['updates'];
 
-    $qualtricsUpdates = [];
+    $updates = [];
     foreach ($updates as $questionKey => $responseValue) {
-        $qualtricsUpdates[$questionKey] = $responseValue;
+        $updates[$questionKey] = $responseValue;
     }
 
-    $update_result = editResponseInQualtrics($responseId, $qualtricsUpdates);
-
-    if (is_wp_error($update_result)) {
-        return new WP_Error('qualtrics_update_failed', $update_result->get_error_message());
-    }
+    $update_result = editResponseInQualtrics($responseId, $updates);
 
     return rest_ensure_response(array(
         'success' => true,
         'message' => 'All responses updated successfully.'
     ));
 }
+
+// function editResponse(WP_REST_Request $request) {
+//     // Extract the responseId from the request
+//     $responseId = $request->get_param('responseId');
+
+//     // Check if responseId is provided
+//     if (!$responseId) {
+//         return new WP_REST_Response(['success' => false, 'message' => 'Response ID not provided'], 400);
+//     }
+
+//     // Call the function to delete the response in Qualtrics
+//     return deleteResponseFromQualtrics(['responseId' => $responseId]);
+// }
+
 
 ?>

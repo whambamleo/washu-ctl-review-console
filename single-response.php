@@ -164,92 +164,128 @@ Template Name: Single Response
     }
 
 
-    async function saveChanges(fieldName, fieldValue) {
-        // const changes = [];
-        // const form = document.getElementById("responseContainer");
-        // const responseId = new URLSearchParams(window.location.search).get('responseId');
-        // const updatedResponses = {};
-        // get the labels and textarea responses of the form submission.
-        // cannot use the names of the textareas because both the names and number
-        // of elements in the form can change if the Qualtrics form changes.
-        // loop goes till length-1 because save button is the last element.
+    function saveChanges() {
+    const form = document.getElementById("responseContainer");
+    const responseId = new URLSearchParams(window.location.search).get('responseId');
+    const updates = {};
 
-        const form = document.getElementById("responseContainer");
-        // const responseId = new URLSearchParams(window.location.search).get('responseId');
-        const updates = {};
-        // for (let i = 0; i < form.elements.length - 1; i++) {
-        //     let element = form.elements[i];
-        //     if (element.tagName.toLowerCase() === "textarea") {
-        //         changes.push(element.value);
-        //     }
-        // }
-
-        for (let i = 0; i < form.elements.length -1; i++) {
-            let element = form.elements[i];
-            if (element.tagName.toLowerCase() === "textarea" && element.name) {
-                updates[element.name] = element.value;
-            }
+    // Collect updates from the form elements
+    for (let i = 0; i < form.elements.length - 1; i++) {
+        let element = form.elements[i];
+        if (element.tagName.toLowerCase() === "textarea" && element.name) {
+            updates[element.name] = element.value;
         }
+    }
+
+    // Make the API request to update the response
+    fetch('/review-console/wp-json/console/v1/editResponse', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            responseId: responseId,
+            updates: updates
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('Changes saved successfully!');
+            // Additional logic on successful save can be added here
+        } else {
+            console.error('Failed to save changes:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    // UI Feedback
+    document.getElementById('saveChangesBtn').style.display = 'none';
+    document.getElementById('editBtn').style.display = 'inline-block';
+    document.querySelectorAll('.response').forEach(element => {
+        element.setAttribute('readonly', true);
+    });
+
+    return false; // Prevent form submission
+}
+
+
+    // function saveChanges() {
+    //     // const changes = [];
+    //     // const form = document.getElementById("responseContainer");
+    //     // const responseId = new URLSearchParams(window.location.search).get('responseId');
+    //     // const updatedResponses = {};
+    //     // get the labels and textarea responses of the form submission.
+    //     // cannot use the names of the textareas because both the names and number
+    //     // of elements in the form can change if the Qualtrics form changes.
+    //     // loop goes till length-1 because save button is the last element.
+
+    //     const form = document.getElementById("responseContainer");
+    //     const responseId = new URLSearchParams(window.location.search).get('responseId');
+    //     const updates = {};
+    //     // for (let i = 0; i < form.elements.length - 1; i++) {
+    //     //     let element = form.elements[i];
+    //     //     if (element.tagName.toLowerCase() === "textarea") {
+    //     //         changes.push(element.value);
+    //     //     }
+    //     // }
+
+    //     for (let i = 0; i < form.elements.length -1; i++) {
+    //         let element = form.elements[i];
+    //         if (element.tagName.toLowerCase() === "textarea" && element.name) {
+    //             updates[element.name] = element.value;
+    //         }
+    //     }
 
         
 
-        // TODO: call backend with changes so that it can save the changes
-        console.log(updates);
-        // hide the saveChanges button
-        const saveBtn = document.getElementById('saveChangesBtn');
-        saveBtn.style.display = 'none';
+    //     // TODO: call backend with changes so that it can save the changes
+    //     console.log(updates);
+    //     // hide the saveChanges button
+    //     const saveBtn = document.getElementById('saveChangesBtn');
+    //     saveBtn.style.display = 'none';
 
-        // show the edit button
-        const editBtn = document.getElementById('editBtn');
-        editBtn.style.display = 'inline-block';
+    //     // show the edit button
+    //     const editBtn = document.getElementById('editBtn');
+    //     editBtn.style.display = 'inline-block';
 
-        // make all responses readonly
-        const responseElements = document.querySelectorAll('.response');
-        responseElements.forEach(element => {
-            element.setAttribute('readonly', true);
-        });
+    //     // make all responses readonly
+    //     const responseElements = document.querySelectorAll('.response');
+    //     responseElements.forEach(element => {
+    //         element.setAttribute('readonly', true);
+    //     });
 
+    //     fetch('/review-console/wp-json/console/v1/editResponse', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             responseId: responseId,
+    //             updates: updates
+    //         }),
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             console.log('Changes saved successfully!');
+    //         } else {
+    //             console.error('Failed to save changes: ' + data.message);
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //     });
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const responseId = urlParams.get('responseId');
-        const baseURL = '/review-console/wp-json/console/v1/setEmbeddedData';
-        const endpointURL = `${baseURL}?responseId=${encodeURIComponent(responseId)}&fieldName=${encodeURIComponent(fieldName)}&fieldValue=${encodeURIComponent(fieldValue)}`;
-
-        try {
-            const response = await fetch(endpointURL);
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const data = await response.json();
-            // window.location.reload();
-        } catch (error) {
-            console.error(error);
-        } 
-        return false
-        // fetch('/review-console/wp-json/console/v1/editResponse', {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         responseId: responseId,
-        //         updates: updates
-        //     }),
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     if (data.success) {
-        //         console.log('Changes saved successfully!');
-        //     } else {
-        //         console.error('Failed to save changes: ' + data.message);
-        //     }
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // });
-
-        // return false;
-    }
+    //     return false;
+    // }
 
     async function editResponse() {
         // make all responses editable
@@ -410,7 +446,7 @@ Template Name: Single Response
               <div class="row justify-content-center">
                   <div class="col-md-10" id="mainResponseContent">
                         <h1 id="statusHeader"></h1>
-                        <form id="responseContainer" action="" method="post" onsubmit="return saveChanges('archived','true')">
+                        <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
 
                         </form>
                   </div>
