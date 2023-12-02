@@ -11,6 +11,26 @@ Template Name: Single Response
         renderContent(responseId);
     });
 
+    function clearResponseContainer() {
+        document.getElementById("responseContainer").innerHTML = '';
+    }
+
+    function clearResponseContainerAndAddSpinner() {
+        document.getElementById("responseContainer").innerHTML = '';
+
+        const spinnerDiv = document.createElement("div");
+        spinnerDiv.className = "spinner-border";
+        spinnerDiv.setAttribute("role", "status");
+
+        const spinnerText = document.createElement("span");
+        spinnerText.className = "sr-only";
+        spinnerText.textContent = "Loading...";
+
+        spinnerDiv.appendChild(spinnerText);
+
+        document.getElementById("responseContainer").appendChild(spinnerDiv);
+    }
+
     async function getQuestionsAndResponses(responseId) {
         try {
             const [formResponses, formQuestions] = await Promise.all([
@@ -53,7 +73,6 @@ Template Name: Single Response
             }
             const data = await response.json();
             // TODO: Add spinner until reload
-            window.location.reload();
         } catch (error) {
             console.error(error);
         }
@@ -72,15 +91,27 @@ Template Name: Single Response
             }).then((result) => {
                 if (result.isConfirmed) {
                     // TODO: call the delete backend
-                    setEmbeddedData(fieldName, fieldValue);
-                    Swal.fire('Confirmed!', 'Response has been archived', 'success');
+                    clearResponseContainerAndAddSpinner();
+                    setEmbeddedData(fieldName, fieldValue)
+                        .then(() => {
+                            Swal.fire('Confirmed!', 'Response has been archived', 'success');
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const responseId = urlParams.get('responseId');
+                            renderContent(responseId);
+                        });
                     // TODO: re-direct to dashboard
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire('Canceled', 'Response has not been archived', 'info');
                 }
             });
         } else {
-            setEmbeddedData(fieldName, fieldValue);
+            clearResponseContainerAndAddSpinner();
+            setEmbeddedData(fieldName, fieldValue)
+                .then(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const responseId = urlParams.get('responseId');
+                    renderContent(responseId);
+                });
         }
     }
 
