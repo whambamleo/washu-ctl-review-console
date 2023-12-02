@@ -96,7 +96,6 @@ Template Name: Single Response
             }
             const data = await response.json();
             return JSON.parse(data);
-            // renderSingleResponse(JSON.parse(data));
         } catch (error) {
             console.error(error);
         }
@@ -149,7 +148,7 @@ Template Name: Single Response
                 .then(data => {
                     if (data.success) {
                         Swal.fire('Confirmed!', 'Response was deleted successfully', 'success');
-                        window.location.href = 'https://yujunectl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+                        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
                     } else {
                         Swal.fire('Failed!', 'Failed to delete response', 'error');
                     }

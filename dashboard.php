@@ -105,12 +105,11 @@ Template Name: Dashboard
         }
     }
 
-    async function handleCheckboxChange(checkbox) {
+    async function handleGroupByChange(checkbox) {
         // Define the base URL for your custom endpoint
         const endpointURL = '/review-console/wp-json/console/v1/responsesGrouped';
 
         if (checkbox.checked) {
-            console.log("ON");
             try {
                 const response = await fetch(endpointURL);
                 if (!response.ok) {
@@ -123,6 +122,23 @@ Template Name: Dashboard
             }
         } else {
             getResponses();
+        }
+    }
+
+    async function resetCache() {
+        // Define the base URL for your custom endpoint
+        const endpointURL = '/review-console/wp-json/console/v1/resetCache';
+
+        try {
+            const response = await fetch(endpointURL);
+            if (!response.ok) {
+                throw new Error('Failed to reset wordpress cache');
+            }
+            // TODO: Add spinner until reload
+            console.log('reloading');
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -212,7 +228,6 @@ Template Name: Dashboard
         </div>
         <div class="headerRight">
             <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
-            <button type="button" class="btn btn-lg headerButton">Help</button>
         </div>
     </div>
     <!-- Main Content Section -->
@@ -235,6 +250,12 @@ Template Name: Dashboard
                     <div class="col-12 mt-3 toolbar">
                         <div class="toolbarLeft">
                             <div class="input-group mb-3" id="search">
+                                <button class="search-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"/>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                    </svg>
+                                </button>
                                 <input type="text" class="form-control searchTextInput" aria-describedby="button-addon2" name="filterInput" id="searchBar" oninput="searchKeyWordUpdate(event)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" id="clearButton" onclick="clearSearch(event)">
@@ -243,13 +264,12 @@ Template Name: Dashboard
                                     </svg>
                                     </button>
                                 </div>
-                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2" onclick="filter(event)">Search</button>
                             </div>
                         </div>
                         <div class="toolbarRight">
                             <!-- Radio Buttons -->
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onchange="handleCheckboxChange(this)">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onchange="handleGroupByChange(this)">
                                 <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
                             </div>
 
@@ -264,6 +284,13 @@ Template Name: Dashboard
                                         Oldest First </a>
                                 </div>
                             </div>
+
+                            <button class="reset-button" onclick="resetCache()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M23 4v6h-6"></path>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>

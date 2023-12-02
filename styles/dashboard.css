@@ -80,6 +80,7 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
 #cardContainer .cardCustom {
     width: 98%;
     margin: 10px;
@@ -103,6 +104,22 @@ body {
     display: none;
 }
 
-#searchBar {
-    border-right: none;
+.search-icon {
+    background-color: #01415A;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.reset-button {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #01415A;
 }

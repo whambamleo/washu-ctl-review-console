@@ -9,7 +9,7 @@ class ResponseCollection
     {
         $this->groupedResponses = [];
         $predefinedValues = [
-            'submitted',
+            'Submitted',
             'Tool Consultation',
             'Tool Exploration',
             'Tool Testing',
