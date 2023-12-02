@@ -40,7 +40,8 @@ Template Name: Dashboard
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            renderResponses(JSON.parse(data), false); // Render the responses
+            var archivedCheckbox = document.getElementById("archivedFlexSwitchCheckDefault");
+            renderResponses(JSON.parse(data), false, archivedCheckbox.checked); // Render the responses
         } catch (error) {
             console.error(error);
         }
@@ -58,7 +59,8 @@ Template Name: Dashboard
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            renderResponses(JSON.parse(data), false); // Render the sorted responses
+            var archivedCheckbox = document.getElementById("archivedFlexSwitchCheckDefault");
+            renderResponses(JSON.parse(data), false, archivedCheckbox.checked); // Render the sorted responses
         } catch (error) {
             console.error(error);
         }
@@ -110,7 +112,6 @@ Template Name: Dashboard
         const endpointURL = '/review-console/wp-json/console/v1/responsesGrouped';
 
         if (checkbox.checked) {
-            console.log("ON");
             try {
                 const response = await fetch(endpointURL);
                 if (!response.ok) {
@@ -126,12 +127,22 @@ Template Name: Dashboard
         }
     }
 
-    function renderResponses(responses, isGrouped) {
+    async function handleArchivedCheckboxChange(checkbox) {
+        if (checkbox.checked) {
+            getResponses();
+        } else {
+            getResponses();
+        }
+    }
+
+    function renderResponses(responses, isGrouped, showArchived = false) {
         clearCardContainer();  // remove spinner before loading cards
         const cardContainer = document.getElementById('cardContainer');
 
         if (isGrouped) {
-            console.log(responses["submitted"]);
+            // uncheck the archived box in case it had been previously enabled
+            var archivedCheckbox = document.getElementById("archivedFlexSwitchCheckDefault");
+            archivedCheckbox.checked = false;
             for (const formStatus in responses) {
                 const group = document.createElement('div');
                 group.className = 'cardGroupCustom';
@@ -181,7 +192,17 @@ Template Name: Dashboard
                         ${responseObj.formStatus}
                     </div>
                 `;
-                cardContainer.appendChild(card);
+                if (showArchived) {
+                    if (responseObj.archived == "true") {
+                        cardContainer.appendChild(card);
+                    }
+                } else {
+                    if (responseObj.archived == "false") {
+                        cardContainer.appendChild(card);
+                    }
+                }
+
+                // cardContainer.appendChild(card);
                 // Add a click event listener to the card
                 card.addEventListener('click', function() {
                     routeToSingleResponse(singleResponseURL);
@@ -251,6 +272,11 @@ Template Name: Dashboard
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onchange="handleCheckboxChange(this)">
                                 <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
+                            </div>
+
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="archivedFlexSwitchCheckDefault" onchange="handleArchivedCheckboxChange(this)">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"> Show Archived Only </label>
                             </div>
 
                             <div class="dropdown">
