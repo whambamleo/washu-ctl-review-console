@@ -11,6 +11,22 @@ Template Name: Single Response
         renderContent(responseId);
     });
 
+    async function clearCardContainerAndAddSpinner() {
+        document.getElementById("mainContent").innerHTML = '';
+
+        const spinnerDiv = document.createElement("div");
+        spinnerDiv.className = "spinner-border";
+        spinnerDiv.setAttribute("role", "status");
+
+        const spinnerText = document.createElement("span");
+        spinnerText.className = "sr-only";
+        spinnerText.textContent = "Loading...";
+
+        spinnerDiv.appendChild(spinnerText);
+
+        document.getElementById("mainContent").appendChild(spinnerDiv);
+    }
+
     async function getQuestionsAndResponses(responseId) {
         try {
             const [formResponses, formQuestions] = await Promise.all([
@@ -41,6 +57,7 @@ Template Name: Single Response
 
     // Function to make a request to the /setEmbeddedData endpoint
     async function setEmbeddedData(fieldName, fieldValue) {
+        clearCardContainerAndAddSpinner();
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
         const baseURL = '/review-console/wp-json/console/v1/setEmbeddedData';
@@ -124,6 +141,7 @@ Template Name: Single Response
     }
 
     async function deleteResponse() {
+        clearCardContainerAndAddSpinner();
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
 
@@ -148,7 +166,7 @@ Template Name: Single Response
                 .then(data => {
                     if (data.success) {
                         Swal.fire('Confirmed!', 'Response was deleted successfully', 'success');
-                        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+                        returnToHome(); // Updated redirect URL
                     } else {
                         Swal.fire('Failed!', 'Failed to delete response', 'error');
                     }
@@ -279,6 +297,11 @@ Template Name: Single Response
         archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
         console.log(archived.value);
     }
+
+    function returnToHome() {
+        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+    }
+
 </script>
 <!--    FontAwesome CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -295,11 +318,12 @@ Template Name: Single Response
 <div>
     <div class="header">
         <div class="headerLeft">
-            <h2> CTL Review Console </h2>
+            <h2 onclick="returnToHome()"> CTL Review Console </h2>
         </div>
         <div class="headerRight">
-            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
-            <button type="button" class="btn btn-lg headerButton">Help</button>
+            <a href="https://wustl.az1.qualtrics.com/jfe/form/SV_3EG37AU36cEEDRA" target="_blank">
+                <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            </a>
         </div>
     </div>
     <!-- Main Content Section -->
@@ -315,8 +339,8 @@ Template Name: Single Response
             </ul>
         </div>
         <!-- Center Content -->
-        <div class="col-md-10">
-            <div class="container mt-4">
+        <div class="col-md-10" id="centerContent">
+            <div class="container mt-4" id="mainContent">
                 <div class="row justify-content-center">
                     <div class="col-md-7" id="Headers">
                         <div class="subHeaderLeft">

@@ -12,7 +12,7 @@ Template Name: Dashboard
         document.getElementById("cardContainer").innerHTML = '';
     }
 
-    function clearCardContainerAndAddSpinner() {
+    async function clearCardContainerAndAddSpinner() {
         document.getElementById("cardContainer").innerHTML = '';
 
         const spinnerDiv = document.createElement("div");
@@ -126,6 +126,7 @@ Template Name: Dashboard
     }
 
     async function resetCache() {
+        clearCardContainerAndAddSpinner();
         // Define the base URL for your custom endpoint
         const endpointURL = '/review-console/wp-json/console/v1/resetCache';
 
@@ -134,8 +135,6 @@ Template Name: Dashboard
             if (!response.ok) {
                 throw new Error('Failed to reset wordpress cache');
             }
-            // TODO: Add spinner until reload
-            console.log('reloading');
             window.location.reload();
         } catch (error) {
             console.error(error);
@@ -208,6 +207,11 @@ Template Name: Dashboard
     function routeToSingleResponse(url) {
         window.location.href = url;
     }
+
+    function returnToHome() {
+        window.location.reload();
+    }
+
 </script>
 <!--    FontAwesome CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
@@ -224,10 +228,12 @@ Template Name: Dashboard
     <!-- Top Banner -->
     <div class="header">
         <div class="headerLeft">
-            <h2> CTL Review Console </h2>
+            <h2 onclick="returnToHome()"> CTL Review Console </h2>
         </div>
         <div class="headerRight">
-            <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            <a href="https://wustl.az1.qualtrics.com/jfe/form/SV_3EG37AU36cEEDRA" target="_blank">
+                <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
+            </a>
         </div>
     </div>
     <!-- Main Content Section -->
