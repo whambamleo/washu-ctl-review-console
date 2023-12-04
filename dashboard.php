@@ -32,6 +32,7 @@ Template Name: Dashboard
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
+        // TODO: update to new site name
         const endpointURL = '/review-console/wp-json/console/v1/responses';
 
         try {
@@ -50,6 +51,7 @@ Template Name: Dashboard
         clearCardContainerAndAddSpinner();
 
         // Define the URL for your custom endpoint
+        // TODO: update to new site name
         const endpointURL = '/review-console/wp-json/console/v1/responsesSortedNewestFirst';
 
         try {
@@ -71,6 +73,7 @@ Template Name: Dashboard
         const filterInputValue = document.querySelector('input[name="filterInput"]').value;
 
         // Define the base URL for your custom endpoint
+        // TODO: update to new site name
         const baseURL = '/review-console/wp-json/console/v1/responsesFiltered';
 
         // Construct the URL with query parameters manually
@@ -107,6 +110,7 @@ Template Name: Dashboard
 
     async function handleGroupByChange(checkbox) {
         // Define the base URL for your custom endpoint
+        // TODO: update to new site name
         const endpointURL = '/review-console/wp-json/console/v1/responsesGrouped';
 
         if (checkbox.checked) {
@@ -128,6 +132,7 @@ Template Name: Dashboard
     async function resetCache() {
         clearCardContainerAndAddSpinner();
         // Define the base URL for your custom endpoint
+        // TODO: update to new site name
         const endpointURL = '/review-console/wp-json/console/v1/resetCache';
 
         try {

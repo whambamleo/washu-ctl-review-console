@@ -69,7 +69,6 @@ Template Name: Single Response
                 throw new Error('Failed to fetch data');
             }
             const data = await response.json();
-            // TODO: Add spinner until reload
             window.location.reload();
         } catch (error) {
             console.error(error);
@@ -88,10 +87,8 @@ Template Name: Single Response
                 cancelButtonText: 'Cancel',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // TODO: call the delete backend
                     setEmbeddedData(fieldName, fieldValue);
                     Swal.fire('Confirmed!', 'Response has been archived', 'success');
-                    // TODO: re-direct to dashboard
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire('Canceled', 'Response has not been archived', 'info');
                 }
@@ -181,7 +178,7 @@ Template Name: Single Response
         });
     }
 
-
+    // TODO: update to be only for the comment textbox
     function saveChanges() {
         const changes = [];
         const form = document.getElementById("responseContainer");
@@ -197,7 +194,7 @@ Template Name: Single Response
         }
 
         // TODO: call backend with changes so that it can save the changes
-        console.log(changes);
+
         // hide the saveChanges button
         const saveBtn = document.getElementById('saveChangesBtn');
         saveBtn.style.display = 'none';
@@ -213,7 +210,7 @@ Template Name: Single Response
         });
         return false;
     }
-
+    // TODO: update to be only for comment text box
     async function editResponse() {
         // make all responses editable
         const responseElements = document.querySelectorAll('.response');
@@ -299,6 +296,7 @@ Template Name: Single Response
     }
 
     function returnToHome() {
+        // FIXME: Change url for deployment.
         window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
     }
 
