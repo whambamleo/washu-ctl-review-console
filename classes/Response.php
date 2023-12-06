@@ -4,6 +4,7 @@ class Response {
     private $formStatus;
     private $archived;
     private $formSubmissionDate;
+    private $readableFormSubmissionDate;
     private $formQuestionResponses;
 
     public function __construct($response) {
@@ -12,8 +13,9 @@ class Response {
         // Extracting relevant fields
         $this->formStatus = $values['formStatus'];
         $this->archived = $values['archived'];
-        $this->formSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
-        
+        $this->readableFormSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
+        $this->formSubmissionDate = $values['endDate'];
+
         foreach ($response['values'] as $key => $value) {
             if (str_starts_with($key, "QID")) {
                 $this->formQuestionResponses["$key"] = $value;
@@ -27,7 +29,8 @@ class Response {
             'formStatus' => $this->formStatus,
             'archived' => $this->archived,
             'formSubmissionDate' => $this->formSubmissionDate,
-            'formQuestionResponses' => $this->formQuestionResponses
+            'formQuestionResponses' => $this->formQuestionResponses,
+            'readableFormSubmissionDate' => $this->readableFormSubmissionDate
         ];
 
         return json_encode($json_data);
@@ -65,6 +68,10 @@ class Response {
 
     public function getFormSubmissionDate() {
         return $this->formSubmissionDate;
+    }
+
+    public function getReadableFormSubmissionDate() {
+        return $this->readableFormSubmissionDate;
     }
 
     public function getFormQuestionResponses() {

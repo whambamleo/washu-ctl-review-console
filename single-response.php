@@ -286,7 +286,7 @@ Template Name: Single Response
         }
 
         const formSubmissionDateElement = document.createElement('p');
-        formSubmissionDateElement.textContent = `${responseObj.formSubmissionDate}`;
+        formSubmissionDateElement.textContent = `${responseObj.readableFormSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
 
         // update the archive dropdown to reflect archiving status

@@ -168,7 +168,7 @@ Template Name: Dashboard
                     card.innerHTML = `
                         <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
                         <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
-                        <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                        <p class="card-text text-muted" style="text-align: right;">${responseObj.readableFormSubmissionDate}</p>
                         <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
                         ${responseObj.formStatus}
                         </div>
@@ -196,7 +196,7 @@ Template Name: Dashboard
                 card.innerHTML = `
                     <h5 class="card-title">${responseObj.formQuestionResponses.QID3_TEXT}</h5>
                     <p class="card-text">${responseObj.formQuestionResponses.QID4_TEXT}</p>
-                    <p class="card-text text-muted" style="text-align: right;">${responseObj.formSubmissionDate}</p>
+                    <p class="card-text text-muted" style="text-align: right;">${responseObj.readableFormSubmissionDate}</p>
                     <div class="alert alert-danger text-right position-absolute" style="top: 0; right: 0; padding: 5px; margin: 5px;">
                         ${responseObj.formStatus}
                     </div>
