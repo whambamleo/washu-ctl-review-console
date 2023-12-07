@@ -14,7 +14,7 @@ class Response {
         // Extracting relevant fields
         $this->formStatus = $values['formStatus'];
         $this->archived = $values['archived'];
-        $this->comments = $values['comments'];
+        $this->comments = isset($values['comments']) ? $values['comments'] : null;
         $this->readableFormSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
         $this->formSubmissionDate = $values['endDate'];
 
