@@ -319,7 +319,6 @@ Template Name: Single Response
         formSubmissionDateElement.textContent = `${responseObj.readableFormSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
 
-        if (responseObj.comments) { // Assuming the comments are directly in the responseObj
                 const commentsLabel = document.createElement('label');
                 commentsLabel.classList.add('question');
                 commentsLabel.textContent = "Comments";
@@ -329,7 +328,7 @@ Template Name: Single Response
                 commentsElement.classList.add('comment_response');
                 commentsElement.id = 'commentBox';
                 commentsElement.setAttribute('readonly', true);
-                commentsElement.value = responseObj.comments || '';                
+                commentsElement.value = responseObj.comments ? responseObj.comments : ''; // If null, set to empty string
 
                 if (responseObj.comments !== 'NO_ENTRY') {
                     commentsElement.value = responseObj.comments;
@@ -341,7 +340,6 @@ Template Name: Single Response
                 commentsElement.style.height = 'auto';
                 commentsElement.style.minHeight = '50px'; // Or some other size
                 responseContainer.appendChild(commentsElement);
-            }
 
         // update the archive dropdown to reflect archiving status
         const archived = document.getElementById('archiveDropdown');
