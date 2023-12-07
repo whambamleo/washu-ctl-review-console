@@ -182,10 +182,7 @@ Template Name: Single Response
     function saveChanges() {
         const changes = [];
         const form = document.getElementById("responseContainer");
-        // get the labels and textarea responses of the form submission.
-        // cannot use the names of the textareas because both the names and number
-        // of elements in the form can change if the Qualtrics form changes.
-        // loop goes till length-1 because save button is the last element.
+
         for (let i = 0; i < form.elements.length - 1; i++) {
             let element = form.elements[i];
             if (element.tagName.toLowerCase() === "textarea") {
@@ -204,7 +201,7 @@ Template Name: Single Response
         editBtn.style.display = 'inline-block';
 
         // make all responses readonly
-        const responseElements = document.querySelectorAll('.response');
+        const responseElements = document.querySelectorAll('.comment_response');
         responseElements.forEach(element => {
             element.setAttribute('readonly', true);
         });
@@ -232,6 +229,7 @@ Template Name: Single Response
             submitButton.textContent = 'Save Changes';
             submitButton.classList.add('btn');
             submitButton.classList.add('btn-outline-secondary');
+            submitButton.style.marginTop = '15px';
             submitButton.id = 'saveChangesBtn';
             submitBtnContainer.appendChild(submitButton);
             responseContainer.appendChild(submitBtnContainer);
@@ -385,7 +383,6 @@ Template Name: Single Response
                                         <a class="dropdown-item" onclick="checkBeforeSettingEmbeddedData('archived','false')">Unarchive</a>
                                     </div>
                             </div>
-                            <button class="btn btn-outline-secondary" id="editBtn" onclick="editResponse()"> Edit </button>
                             <button class="btn btn-danger" id="button-addon2" onclick="deleteResponse()"> Delete </button>
                         </div>
                    </div>
@@ -394,8 +391,8 @@ Template Name: Single Response
                   <div class="col-md-10" id="mainResponseContent">
                         <h1 id="statusHeader"></h1>
                         <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
-
                         </form>
+                        <button class="btn btn-outline-secondary" id="editBtn" onclick="editResponse()"> Edit Comment </button>
                   </div>
               </div>
             </div>
