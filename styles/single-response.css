@@ -89,3 +89,13 @@ body {
 .saveBtnContainer {
     text-align: right;
 }
+
+.centerContent {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+}
+
+.spinner-border {
+    margin: auto;
+}

@@ -65,6 +65,13 @@ function initCustomEndpoints(): void
             'permission_callback' => '__return_true',
         ]);
     });
+    add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/resetCache', [
+            'methods' => 'GET',
+            'callback' => 'resetCache',
+            'permission_callback' => '__return_true',
+        ]);
+    });
 }
 
 function getResponses(): string
@@ -73,9 +80,7 @@ function getResponses(): string
 
     if (false === $responseCollection) {
         try {
-            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-            // Cache the object for 1 hour
-            set_transient('response_collection', $responseCollection, 60 * 60);
+            $responseCollection = resetCache();
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -92,9 +97,7 @@ function getResponsesFiltered(): string
 
     if (false === $responseCollection || is_null($responseCollection)) {
         try {
-            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-            // Cache the object for 1 hour
-            set_transient('response_collection', $responseCollection, 60 * 60);
+            $responseCollection = resetCache();
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -110,9 +113,7 @@ function getResponsesGrouped(): string
 
     if (false === $responseCollection || is_null($responseCollection)) {
         try {
-            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-            // Cache the object for 1 hour
-            set_transient('response_collection', $responseCollection, 60 * 60);
+            $responseCollection = resetCache();
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -127,9 +128,7 @@ function getSortedResponsesNewestFirst(): string
 
     if (false === $responseCollection) {
         try {
-            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-            // Cache the object for 1 hour
-            set_transient('response_collection', $responseCollection, 60 * 60);
+            $responseCollection = resetCache();
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -145,9 +144,7 @@ function getSingleResponse($data) : string {
     $responseCollection = get_transient('response_collection');
     if (false === $responseCollection) {
         try {
-            $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-            // Cache the object for 1 hour
-            set_transient('response_collection', $responseCollection, 60 * 60);
+            $responseCollection = resetCache();
         } catch (Exception $e) {
             return "Unable to make responseCollection";
         }
@@ -168,8 +165,6 @@ function deleteResponse(WP_REST_Request $request) {
     // Call the function to delete the response in Qualtrics
     return deleteResponseFromQualtrics(['responseId' => $responseId]);
 }
-
-
 
 function getQuestions() {
     $questionCollection = get_transient('question_collection');
@@ -194,13 +189,23 @@ function setEmbeddedData($data) : string {
 
     // Reset the cache with latest values
     try {
-        $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
-        // Cache the object for 1 hour
-        set_transient('response_collection', $responseCollection, 60 * 60);
+        $responseCollection = resetCache();
     } catch (Exception $e) {
         return "Unable to make responseCollection";
     }
 
     return $response;
+}
+
+// Resets the wordpress cache with the latest responses
+function resetCache() : ResponseCollection {
+    try {
+        $responseCollection = new ResponseCollection(getResponsesFromQualtrics());
+        // Cache the object for 1 hour
+        set_transient('response_collection', $responseCollection, 60 * 60);
+        return $responseCollection;
+    } catch (Exception $e) {
+        return "Cache reset failed";
+    }
 }
 ?>

@@ -108,6 +108,22 @@ Description: A custom WP theme developed for CTL review console
     display: none;
 }
 
-#searchBar {
-    border-right: none;
+.search-icon {
+    background-color: #01415A;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.reset-button {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #01415A;
 }
