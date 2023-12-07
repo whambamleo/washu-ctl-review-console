@@ -1,101 +1,107 @@
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .header {
-    background-color: #01415A;
-    color: white;
-    height: 125px;
-    margin: 0px;
+  background-color: #01415a;
+  color: white;
+  height: 125px;
+  margin: 0px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .headerLeft {
-    height: 100%;
-    width: 30%;
-    margin-left: 70px;
-    display: flex;
-    align-items: center;
+  height: 100%;
+  width: 30%;
+  margin-left: 70px;
+  display: flex;
+  align-items: center;
 }
 
 .headerRight {
-    height: 100%;
-    width: 70%;
-    margin-right: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 25px;
+  height: 100%;
+  width: 70%;
+  margin-right: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 25px;
 }
 
 .header .headerButton {
-    background-color: #01415A;
-    color: white;
+  background-color: #01415a;
+  color: white;
 }
 
 .sidebar {
-    background-color: #01415A;
-    height: 100vh;
+  background-color: #01415a;
+  height: 100vh;
 }
 
 .sidebarList .sidebarListItem {
-    background-color: #01415A;
-    color: white;
+  background-color: #01415a;
+  color: white;
 }
 
 .subHeaderLeft {
-    height: 100%;
-    display: flex;
-    align-items: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .subHeaderRight {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 25px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 25px;
 }
 
 #statusHeader {
-    font-size: large;
+  font-size: large;
 }
 
 #mainResponseContent {
-    padding: 20px;
+  padding: 20px;
 }
 
 .question {
-    font-weight: bold;
-    padding-top: 10px;
+  font-weight: bold;
+  padding-top: 10px;
 }
 
 .response {
-    display: block;
-    border: 1px solid grey;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-left: 3px solid grey;
-    border-right: 3px solid grey;
+  display: block;
+  border: 1px solid grey;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-left: 3px solid grey;
+  border-right: 3px solid grey;
 }
 
 .response:focus {
-    outline: none;
+  outline: none;
 }
 
 .saveBtnContainer {
-    text-align: right;
+  text-align: right;
 }
 
 .centerContent {
-    height: 100%;
-    width: 100%;
-    justify-content: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
 }
 
 .spinner-border {
-    margin: auto;
+  margin: auto;
+}
+
+.comment-timestamp {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: gray;
 }
