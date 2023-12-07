@@ -3,6 +3,7 @@ class Response {
     private $responseId;
     private $formStatus;
     private $archived;
+    private $comments;
     private $formSubmissionDate;
     private $readableFormSubmissionDate;
     private $formQuestionResponses;
@@ -13,6 +14,7 @@ class Response {
         // Extracting relevant fields
         $this->formStatus = $values['formStatus'];
         $this->archived = $values['archived'];
+        $this->comments = $values['comments'];
         $this->readableFormSubmissionDate = $this->reformatSubmissionDate($values['endDate']);
         $this->formSubmissionDate = $values['endDate'];
 
@@ -28,6 +30,7 @@ class Response {
             'responseId' => $this->responseId,
             'formStatus' => $this->formStatus,
             'archived' => $this->archived,
+            'comments' => $this->comments,
             'formSubmissionDate' => $this->formSubmissionDate,
             'formQuestionResponses' => $this->formQuestionResponses,
             'readableFormSubmissionDate' => $this->readableFormSubmissionDate
@@ -42,6 +45,10 @@ class Response {
 
     public function getFormStatus() {
         return $this->formStatus;
+    }
+
+    public function getComments() {
+        return $this->comments;
     }
 
     public function reformatSubmissionDate($formSubmissionDate) {

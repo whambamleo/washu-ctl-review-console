@@ -213,7 +213,7 @@ Template Name: Single Response
     // TODO: update to be only for comment text box
     async function editResponse() {
         // make all responses editable
-        const responseElements = document.querySelectorAll('.response');
+        const responseElements = document.querySelectorAll('.comment_response');
         responseElements.forEach(element => {
             element.removeAttribute('readonly');
         });
@@ -289,6 +289,22 @@ Template Name: Single Response
         formSubmissionDateElement.textContent = `${responseObj.readableFormSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
 
+        if (responseObj.comments) { // Assuming the comments are directly in the responseObj
+                const commentsLabel = document.createElement('label');
+                commentsLabel.classList.add('question');
+                commentsLabel.textContent = "Comments";
+                responseContainer.appendChild(commentsLabel);
+
+                const commentsElement = document.createElement('textarea');
+                commentsElement.classList.add('comment_response');
+                commentsElement.setAttribute('readonly', true);
+                commentsElement.value = responseObj.comments;
+                commentsElement.style.width = '100%';
+                commentsElement.style.height = 'auto';
+                commentsElement.style.minHeight = '50px'; // Or some other size
+                responseContainer.appendChild(commentsElement);
+            }
+
         // update the archive dropdown to reflect archiving status
         const archived = document.getElementById('archiveDropdown');
         archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
@@ -297,7 +313,7 @@ Template Name: Single Response
 
     function returnToHome() {
         // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+        window.location.href = 'https://yujunectl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
     }
 
 </script>
