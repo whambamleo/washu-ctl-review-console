@@ -337,8 +337,12 @@ Template Name: Single Response
         commentsElement.style.overflow = 'hidden';
         commentsElement.style.resize = 'none'; // Prevent manual resizing
         commentsElement.setAttribute('readonly', true);
-        commentsElement.value = responseObj.comments || ''; // Use empty string if comments are null
-        commentsElement.value = responseObj.comments ? responseObj.comments.replace(/__NEWLINE__/g, '\n') : '';
+        // commentsElement.value = responseObj.comments || ''; // Use empty string if comments are null
+        // commentsElement.value = (comments !== 'NO_ENTRY') ? comments.replace(/__NEWLINE__/g, '\n') : '';
+        // commentsElement.value = responseObj.comments ? responseObj.comments.replace(/__NEWLINE__/g, '\n') : '';
+        const comments = responseObj.comments || '';
+        commentsElement.value = (comments !== 'NO_ENTRY') ? comments.replace(/__NEWLINE__/g, '\n') : '';
+
 
         // Ensure the textarea adjusts its height to show all content
         commentsElement.addEventListener('input', function() {
