@@ -49,6 +49,7 @@ class Response {
 
     public function getArchived() {
         return $this->archived;
+    }
         
     public function getComments() {
         return $this->comments;
