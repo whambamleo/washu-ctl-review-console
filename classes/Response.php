@@ -44,6 +44,10 @@ class Response {
         return $this->formStatus;
     }
 
+    public function getArchived() {
+        return $this->archived;
+    }
+
     public function reformatSubmissionDate($formSubmissionDate) {
         $dateTime = new DateTime($formSubmissionDate);
         $now = new DateTime();

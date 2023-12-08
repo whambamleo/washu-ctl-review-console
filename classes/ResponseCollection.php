@@ -41,7 +41,19 @@ class ResponseCollection
     public function getResponseJSON() {
         $output = array();
         foreach ($this->responses as $response) {
-            $output[] = $response->getJSON();
+            if ($response->getArchived() === "false") {
+                $output[] = $response->getJSON();
+            }
+        }
+        return json_encode($output);
+    }
+
+    public function getResponseArchivedJSON() {
+        $output = array();
+        foreach ($this->responses as $response) {
+            if ($response->getArchived() === "true") {
+                $output[] = $response->getJSON();
+            }
         }
         return json_encode($output);
     }
@@ -61,7 +73,9 @@ class ResponseCollection
         foreach ($this->groupedResponses as $formStatus => $groupedResponse) {
             $group = array();
             foreach ($groupedResponse as $response) {
-                $group[] = $response->getJSON();
+                if ($response->getArchived() === "false") {
+                    $group[] = $response->getJSON();
+                }
             }
             $output[$formStatus] = $group;
         }

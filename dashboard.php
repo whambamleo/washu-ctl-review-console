@@ -129,6 +129,26 @@ Template Name: Dashboard
         }
     }
 
+    async function handleArchivedChange(checkbox) {
+        const endpointURL = '/review-console/wp-json/console/v1/responsesArchived';
+        if (checkbox.checked) {
+            try {
+                const response = await fetch(endpointURL);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const data = await response.json();
+                renderResponses(JSON.parse(data), false, true); // Render the responses
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            getResponses();
+        }
+
+
+    }
+
     async function resetCache() {
         clearCardContainerAndAddSpinner();
         // Define the base URL for your custom endpoint
@@ -146,12 +166,11 @@ Template Name: Dashboard
         }
     }
 
-    function renderResponses(responses, isGrouped) {
+    function renderResponses(responses, isGrouped, isArchived) {
         clearCardContainer();  // remove spinner before loading cards
         const cardContainer = document.getElementById('cardContainer');
 
         if (isGrouped) {
-            console.log(responses["submitted"]);
             for (const formStatus in responses) {
                 const group = document.createElement('div');
                 group.className = 'cardGroupCustom';
@@ -185,6 +204,10 @@ Template Name: Dashboard
             // uncheck the groupby box because there is currently no sorting and filtering for grouped values.
             var checkbox = document.getElementById("flexSwitchCheckDefault");
             checkbox.checked = false;
+            if (!isArchived) {
+                var checkbox = document.getElementById("flexSwitchCheckDefaultArchived");
+                checkbox.checked = false;
+            }
             responses.forEach(response => {
                 const responseObj = JSON.parse(response);
                 const responseId = responseObj.responseId;
@@ -279,6 +302,10 @@ Template Name: Dashboard
                         </div>
                         <div class="toolbarRight">
                             <!-- Radio Buttons -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefaultArchived" onchange="handleArchivedChange(this)">
+                                <label class="form-check-label" for="flexSwitchCheckDefault"> Show Archived Only  </label>
+                            </div>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onchange="handleGroupByChange(this)">
                                 <label class="form-check-label" for="flexSwitchCheckDefault"> Group by Status </label>
