@@ -359,7 +359,7 @@ Template Name: Single Response
 
     function returnToHome() {
         // FIXME: Change url for deployment.
-        window.location.href = 'https://yujunectl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
     }
 
 </script>
@@ -391,11 +391,7 @@ Template Name: Single Response
         <!-- Left Sidebar -->
         <div class="col-md-2 sidebar">
             <ul class="list-group sidebarList">
-                <li class="list-group-item sidebarListItem">Cras justo odio</li>
-                <li class="list-group-item sidebarListItem">Dapibus ac facilisis in</li>
-                <li class="list-group-item sidebarListItem">Morbi leo risus</li>
-                <li class="list-group-item sidebarListItem">Porta ac consectetur ac</li>
-                <li class="list-group-item sidebarListItem">Vestibulum at eros</li>
+                <li class="list-group-item sidebarListItem">Knowledge Base</li>
             </ul>
         </div>
         <!-- Center Content -->
