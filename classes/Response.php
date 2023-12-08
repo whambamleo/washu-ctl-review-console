@@ -47,6 +47,9 @@ class Response {
         return $this->formStatus;
     }
 
+    public function getArchived() {
+        return $this->archived;
+        
     public function getComments() {
         return $this->comments;
     }

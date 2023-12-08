@@ -38,6 +38,13 @@ function initCustomEndpoints(): void
         ]);
     });
     add_action('rest_api_init', function () {
+        register_rest_route('console/v1', '/responsesArchived', [
+            'methods' => 'GET',
+            'callback' => 'getResponsesArchived',
+            'permission_callback' => '__return_true',
+        ]);
+    });
+    add_action('rest_api_init', function () {
         register_rest_route('console/v1', '/singleResponse', [
             'methods' => 'GET',
             'callback' => 'getSingleResponse',
@@ -108,7 +115,7 @@ function getResponsesFiltered(): string
 }
 
 function getResponsesGrouped(): string
-{    
+{
     $responseCollection = get_transient('response_collection');
 
     if (false === $responseCollection || is_null($responseCollection)) {
@@ -120,6 +127,21 @@ function getResponsesGrouped(): string
     }
 
     return $responseCollection->getResponseGroupedJSON();
+}
+
+function getResponsesArchived(): string
+{
+    $responseCollection = get_transient('response_collection');
+
+    if (false === $responseCollection || is_null($responseCollection)) {
+        try {
+            $responseCollection = resetCache();
+        } catch (Exception $e) {
+            return "Unable to make responseCollection";
+        }
+    }
+
+    return $responseCollection->getResponseArchivedJSON();
 }
 
 function getSortedResponsesNewestFirst(): string
