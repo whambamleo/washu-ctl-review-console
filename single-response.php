@@ -214,7 +214,9 @@ Template Name: Single Response
             console.error('Comment box not found');
             return false;
         }
-        const commentText = commentBox.value;
+
+        // Convert newlines to <br> tags for HTML display
+        const commentText = commentBox.value.replace(/\n/g, '__NEWLINE__');
         const urlParams = new URLSearchParams(window.location.search);
         const responseId = urlParams.get('responseId');
 
@@ -237,6 +239,7 @@ Template Name: Single Response
 
         return false; // to prevent default form submission
     }
+
 
 
     // TODO: update to be only for comment text box
@@ -282,7 +285,6 @@ Template Name: Single Response
         const questionsAndResponses = matchQuestionsAndResponses(formResponses, formQuestions);
         renderSingleResponse(questionsAndResponses, formResponses);
     }
-
     function renderSingleResponse(formInfo, fullResponse) {
         const responseObj = JSON.parse(fullResponse);
         console.log(responseObj);
@@ -311,7 +313,10 @@ Template Name: Single Response
                 responseContainer.appendChild(responseElement);
 
                 // Make sure that the text area is long enough to display all of the content
-                responseElement.style.height = (responseElement.scrollHeight) + 'px';
+                responseElement.style.height = 'auto';
+                responseElement.style.minHeight = '50px'; // Ensure it's not too small
+                responseElement.style.overflow = 'hidden'; // Prevent scroll bars
+                responseElement.style.resize = 'none'; // Prevent manual resizing
             }
         }
 
@@ -319,33 +324,36 @@ Template Name: Single Response
         formSubmissionDateElement.textContent = `${responseObj.readableFormSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
 
-                const commentsLabel = document.createElement('label');
-                commentsLabel.classList.add('question');
-                commentsLabel.textContent = "Comments";
-                responseContainer.appendChild(commentsLabel);
+        const commentsLabel = document.createElement('label');
+        commentsLabel.classList.add('question');
+        commentsLabel.textContent = "Comments";
+        responseContainer.appendChild(commentsLabel);
 
-                const commentsElement = document.createElement('textarea');
-                commentsElement.classList.add('comment_response');
-                commentsElement.id = 'commentBox';
-                commentsElement.setAttribute('readonly', true);
-                commentsElement.value = responseObj.comments ? responseObj.comments : ''; // If null, set to empty string
+        const commentsElement = document.createElement('textarea');
+        commentsElement.classList.add('comment_response');
+        commentsElement.id = 'commentBox';
+        commentsElement.style.width = '100%';
+        commentsElement.style.height = 'auto';
+        commentsElement.style.overflow = 'hidden';
+        commentsElement.style.resize = 'none'; // Prevent manual resizing
+        commentsElement.setAttribute('readonly', true);
+        commentsElement.value = responseObj.comments || ''; // Use empty string if comments are null
+        commentsElement.value = responseObj.comments ? responseObj.comments.replace(/__NEWLINE__/g, '\n') : '';
 
-                if (responseObj.comments !== 'NO_ENTRY') {
-                    commentsElement.value = responseObj.comments;
-                } else {
-                    commentsElement.value = '';
-                }
+        // Ensure the textarea adjusts its height to show all content
+        commentsElement.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
 
-                commentsElement.style.width = '100%';
-                commentsElement.style.height = 'auto';
-                commentsElement.style.minHeight = '50px'; // Or some other size
-                responseContainer.appendChild(commentsElement);
+        responseContainer.appendChild(commentsElement);
+        commentsElement.dispatchEvent(new Event('input'));
 
-        // update the archive dropdown to reflect archiving status
+        // Update the archive dropdown to reflect archiving status
         const archived = document.getElementById('archiveDropdown');
         archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
-        console.log(archived.value);
     }
+
 
     
 
