@@ -179,41 +179,73 @@ Template Name: Single Response
     }
 
     // TODO: update to be only for the comment textbox
+    // function saveChanges() {
+    //     const changes = [];
+    //     const form = document.getElementById("responseContainer");
+
+    //     for (let i = 0; i < form.elements.length - 1; i++) {
+    //         let element = form.elements[i];
+    //         if (element.tagName.toLowerCase() === "textarea") {
+    //             changes.push(element.value);
+    //         }
+    //     }
+
+    //     // TODO: call backend with changes so that it can save the changes
+
+    //     // hide the saveChanges button
+    //     const saveBtn = document.getElementById('saveChangesBtn');
+    //     saveBtn.style.display = 'none';
+
+    //     // show the edit button
+    //     const editBtn = document.getElementById('editBtn');
+    //     editBtn.style.display = 'inline-block';
+
+    //     // make all responses readonly
+    //     const responseElements = document.querySelectorAll('.comment_response');
+    //     responseElements.forEach(element => {
+    //         element.setAttribute('readonly', true);
+    //     });
+    //     return false;
+    // }
+
     function saveChanges() {
-        const changes = [];
-        const form = document.getElementById("responseContainer");
-        // get the labels and textarea responses of the form submission.
-        // cannot use the names of the textareas because both the names and number
-        // of elements in the form can change if the Qualtrics form changes.
-        // loop goes till length-1 because save button is the last element.
-        for (let i = 0; i < form.elements.length - 1; i++) {
-            let element = form.elements[i];
-            if (element.tagName.toLowerCase() === "textarea") {
-                changes.push(element.value);
-            }
+        const commentBox = document.getElementById('commentBox');
+        if (!commentBox) {
+            console.error('Comment box not found');
+            return false;
         }
 
-        // TODO: call backend with changes so that it can save the changes
+        // Convert newlines to <br> tags for HTML display
+        const commentText = commentBox.value.replace(/\n/g, '__NEWLINE__');
+        const urlParams = new URLSearchParams(window.location.search);
+        const responseId = urlParams.get('responseId');
 
-        // hide the saveChanges button
-        const saveBtn = document.getElementById('saveChangesBtn');
-        saveBtn.style.display = 'none';
+        console.log('Saving changes to comment:', commentText);
 
-        // show the edit button
-        const editBtn = document.getElementById('editBtn');
-        editBtn.style.display = 'inline-block';
+        // Use setEmbeddedData to update the comments
+        setEmbeddedData('comments', commentText)
+            .then(() => {
+                Swal.fire('Updated!', 'Comment has been updated successfully.', 'success');
+            })
+            .catch((error) => {
+                console.error('Failed to update comment:', error);
+                Swal.fire('Error', 'Failed to update comment.', 'error');
+            });
 
-        // make all responses readonly
-        const responseElements = document.querySelectorAll('.response');
-        responseElements.forEach(element => {
-            element.setAttribute('readonly', true);
-        });
-        return false;
+        document.getElementById('saveChangesBtn').style.display = 'none';
+        document.getElementById('editBtn').style.display = 'inline-block';
+
+        commentBox.setAttribute('readonly', true);
+
+        return false; // to prevent default form submission
     }
+
+
+
     // TODO: update to be only for comment text box
     async function editResponse() {
         // make all responses editable
-        const responseElements = document.querySelectorAll('.response');
+        const responseElements = document.querySelectorAll('.comment_response');
         responseElements.forEach(element => {
             element.removeAttribute('readonly');
         });
@@ -232,6 +264,7 @@ Template Name: Single Response
             submitButton.textContent = 'Save Changes';
             submitButton.classList.add('btn');
             submitButton.classList.add('btn-outline-secondary');
+            submitButton.style.marginTop = '15px';
             submitButton.id = 'saveChangesBtn';
             submitBtnContainer.appendChild(submitButton);
             responseContainer.appendChild(submitBtnContainer);
@@ -252,7 +285,6 @@ Template Name: Single Response
         const questionsAndResponses = matchQuestionsAndResponses(formResponses, formQuestions);
         renderSingleResponse(questionsAndResponses, formResponses);
     }
-
     function renderSingleResponse(formInfo, fullResponse) {
         const responseObj = JSON.parse(fullResponse);
         console.log(responseObj);
@@ -281,7 +313,10 @@ Template Name: Single Response
                 responseContainer.appendChild(responseElement);
 
                 // Make sure that the text area is long enough to display all of the content
-                responseElement.style.height = (responseElement.scrollHeight) + 'px';
+                responseElement.style.height = 'auto';
+                responseElement.style.minHeight = '50px'; // Ensure it's not too small
+                responseElement.style.overflow = 'hidden'; // Prevent scroll bars
+                responseElement.style.resize = 'none'; // Prevent manual resizing
             }
         }
 
@@ -289,15 +324,42 @@ Template Name: Single Response
         formSubmissionDateElement.textContent = `${responseObj.readableFormSubmissionDate}`;
         responseContainer.appendChild(formSubmissionDateElement);
 
-        // update the archive dropdown to reflect archiving status
+        const commentsLabel = document.createElement('label');
+        commentsLabel.classList.add('question');
+        commentsLabel.textContent = "Comments";
+        responseContainer.appendChild(commentsLabel);
+
+        const commentsElement = document.createElement('textarea');
+        commentsElement.classList.add('comment_response');
+        commentsElement.id = 'commentBox';
+        commentsElement.style.width = '100%';
+        commentsElement.style.height = 'auto';
+        commentsElement.style.overflow = 'hidden';
+        commentsElement.style.resize = 'none'; // Prevent manual resizing
+        commentsElement.setAttribute('readonly', true);
+        commentsElement.value = responseObj.comments || ''; // Use empty string if comments are null
+        commentsElement.value = responseObj.comments ? responseObj.comments.replace(/__NEWLINE__/g, '\n') : '';
+
+        // Ensure the textarea adjusts its height to show all content
+        commentsElement.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        responseContainer.appendChild(commentsElement);
+        commentsElement.dispatchEvent(new Event('input'));
+
+        // Update the archive dropdown to reflect archiving status
         const archived = document.getElementById('archiveDropdown');
         archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
-        console.log(archived.value);
     }
+
+
+    
 
     function returnToHome() {
         // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+        window.location.href = 'https://yujunectl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
     }
 
 </script>
@@ -369,7 +431,6 @@ Template Name: Single Response
                                         <a class="dropdown-item" onclick="checkBeforeSettingEmbeddedData('archived','false')">Unarchive</a>
                                     </div>
                             </div>
-                            <button class="btn btn-outline-secondary" id="editBtn" onclick="editResponse()"> Edit </button>
                             <button class="btn btn-danger" id="button-addon2" onclick="deleteResponse()"> Delete </button>
                         </div>
                    </div>
@@ -378,9 +439,9 @@ Template Name: Single Response
                   <div class="col-md-10" id="mainResponseContent">
                         <h1 id="statusHeader"></h1>
                         <form id="responseContainer" action="" method="post" onsubmit="return saveChanges()">
-
                         </form>
-                  </div>
+                        <button class="btn btn-outline-secondary" id="editBtn" onclick="editResponse()"> Edit Comment </button>
+                    </div>
               </div>
             </div>
         </div>
