@@ -5,8 +5,8 @@ Template Name: Knowledge Base
 ?>
 <script>
     function returnToHome() {
-        // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+        let url = new URL(window.location.href);
+        window.location.href = `${url.protocol}//${url.host}/review-console/dashboard`;
     }
 </script>
 <!--    FontAwesome CSS -->

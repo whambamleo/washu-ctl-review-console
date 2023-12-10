@@ -327,13 +327,13 @@ Template Name: Single Response
     }
 
     function openKnowledgeBase() {
-        // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/knowledge-base';
+        let url = new URL(window.location.href);
+        window.location.href = `${url.protocol}//${url.host}/review-console/knowledge-base`;
     }
 
     function returnToHome() {
-        // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/';
+        let url = new URL(window.location.href);
+        window.location.href = `${url.protocol}//${url.host}/review-console/dashboard`;
     }
 
 </script>
