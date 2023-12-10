@@ -90,11 +90,20 @@ Template Name: Knowledge Base
             </ol>
         </section>
 
-        <section>
-            <h2>4. Architecture</h2>
-            <p>Front-end (dashboard.php and single-responses.php) wired to javascript functions that signals backend-endpoint calls (backend-endpoint.php). These calls are tied to the API methods in Qualtrics.php that make API calls to the Qualtrics DB.</p>
-            <p>Need Leo to check for accuracy</p>
-        </section>
+            <section>
+                <h2>4. Architecture</h2>
+                <p>
+                    qualtrics.php contains a library of generic functions that interact with the
+                    Qualtrics API, including pulling reponses, questions and setting embedded
+                    data fields. Our backend endpoints are the communication layer between the
+                    Wordpress front-end and the Qualtrics database. More specifically, the
+                    Wordpress templates are defined in dashboard.php and single-responses.php,
+                    which are wired to JavaScript functions that signals backend-endpoint calls
+                    defined in backend-endpoints.php (which also registers the custom REST API
+                    with route console/v1). These calls are tied to the API methods in
+                    Qualtrics.php that make API calls to the Qualtrics DB.
+                </p>
+            </section>
 
         <section>
             <h2>5. Cache and Reset Button</h2>
