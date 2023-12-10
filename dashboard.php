@@ -180,7 +180,8 @@ Template Name: Dashboard
                 for (const i in responseUnderStatus) {
                     const responseObj = JSON.parse(responseUnderStatus[i]);
                     const responseId = responseObj.responseId;
-                    const singleResponseURL = `${window.location.href}single-response/?responseId=${responseId}`;
+                    let url = new URL(window.location.href);
+                    const singleResponseURL = `${url.protocol}//${url.host}/review-console/single-response/?responseId=${responseId}`;
                     const card = document.createElement('div');
                     card.className = 'card cardCustom';
 
@@ -211,7 +212,8 @@ Template Name: Dashboard
             responses.forEach(response => {
                 const responseObj = JSON.parse(response);
                 const responseId = responseObj.responseId;
-                const singleResponseURL = `${window.location.href}single-response/?responseId=${responseId}`;
+                let url = new URL(window.location.href);
+                const singleResponseURL = `${url.protocol}//${url.host}/review-console/single-response/?responseId=${responseId}`;
 
                 const card = document.createElement('div');
                 card.className = 'card cardCustom';
