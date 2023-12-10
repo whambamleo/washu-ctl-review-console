@@ -178,36 +178,6 @@ Template Name: Single Response
         });
     }
 
-    // TODO: update to be only for the comment textbox
-    // function saveChanges() {
-    //     const changes = [];
-    //     const form = document.getElementById("responseContainer");
-
-    //     for (let i = 0; i < form.elements.length - 1; i++) {
-    //         let element = form.elements[i];
-    //         if (element.tagName.toLowerCase() === "textarea") {
-    //             changes.push(element.value);
-    //         }
-    //     }
-
-    //     // TODO: call backend with changes so that it can save the changes
-
-    //     // hide the saveChanges button
-    //     const saveBtn = document.getElementById('saveChangesBtn');
-    //     saveBtn.style.display = 'none';
-
-    //     // show the edit button
-    //     const editBtn = document.getElementById('editBtn');
-    //     editBtn.style.display = 'inline-block';
-
-    //     // make all responses readonly
-    //     const responseElements = document.querySelectorAll('.comment_response');
-    //     responseElements.forEach(element => {
-    //         element.setAttribute('readonly', true);
-    //     });
-    //     return false;
-    // }
-
     function saveChanges() {
         const commentBox = document.getElementById('commentBox');
         if (!commentBox) {
@@ -239,8 +209,6 @@ Template Name: Single Response
 
         return false; // to prevent default form submission
     }
-
-
 
     // TODO: update to be only for comment text box
     async function editResponse() {
@@ -358,12 +326,14 @@ Template Name: Single Response
         archived.innerHTML = responseObj.archived === 'true' ? 'Archived' : 'Not Archived';
     }
 
-
-    
+    function openKnowledgeBase() {
+        // FIXME: Change url for deployment.
+        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/knowledge-base';
+    }
 
     function returnToHome() {
         // FIXME: Change url for deployment.
-        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/'; // Updated redirect URL
+        window.location.href = 'https://yabctl.wpenginepowered.com/review-console/dashboard/';
     }
 
 </script>
@@ -382,24 +352,19 @@ Template Name: Single Response
 <div>
     <div class="header">
         <div class="headerLeft">
-            <h2 onclick="returnToHome()"> CTL Review Console </h2>
+        <img src="https://yabctl.wpenginepowered.com/wp-content/uploads/2023/12/CTL_logo.png" alt="CTL_logo.png" onclick="returnToHome()" width="400" height="110">
         </div>
         <div class="headerRight">
             <a href="https://wustl.az1.qualtrics.com/jfe/form/SV_3EG37AU36cEEDRA" target="_blank">
                 <button type="button" class="btn btn-lg headerButton">Qualtrics Dashboard</button>
             </a>
+            <button type="button" class="btn btn-lg headerButton" onclick="openKnowledgeBase()">Knowledge Base</button>
         </div>
     </div>
     <!-- Main Content Section -->
     <div class="row">
-        <!-- Left Sidebar -->
-        <div class="col-md-2 sidebar">
-            <ul class="list-group sidebarList">
-                <li class="list-group-item sidebarListItem">Knowledge Base</li>
-            </ul>
-        </div>
         <!-- Center Content -->
-        <div class="col-md-10" id="centerContent">
+        <div class="col-md-12" id="centerContent">
             <div class="container mt-4" id="mainContent">
                 <div class="row justify-content-center">
                     <div class="col-md-7" id="Headers">
